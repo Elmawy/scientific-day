@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - اليوم العلمي</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- إضافة الميتا تاج للتطبيقات -->
+    <meta name="description" content="تسجيل الدخول لليوم العلمي لمجلس السماع والتعليق لكتاب أخصر المختصرات">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="icon.png">
+    <!-- تحسين الشكل على الجوال -->
+    <style>
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .loading button {
+            position: relative;
+            color: transparent !important;  /* إخفاء النص الأصلي */
+        }
+        .loading button:after {
+            content: "...جاري التحميل";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;  /* لون النص */
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                margin: 0;
+                height: 100vh;
+            }
+            .login-form {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+            }
+            input {
+                font-size: 16px; /* لمنع التكبير التلقائي في iOS */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-form">
+            <h2>تسجيل الدخول لليوم العلمي</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">رقم الجوال:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <button type="submit">دخول</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            form.classList.add('loading');
+            
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            try {
+                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                url.searchParams.append('action', 'verifyUser');
+                url.searchParams.append('email', email);
+                url.searchParams.append('phone', phone);
+
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+
+                const data = await response.json();
+                console.log('Response:', data); // للتحقق من الاستجابة
+                
+                if (data && data.success) {
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userPhone', phone);
+                    localStorage.setItem('userName', data.name);
+                    localStorage.setItem('userGender', data.gender);
+                    localStorage.setItem('userType', data.type);
+                    localStorage.setItem('userCountry', data.country);
+                    localStorage.setItem('attendanceStatus', data.attendanceStatus || 'false');
+                    window.location.href = 'profile.html';
+                } else {
+                    alert(data.message || 'البيانات غير صحيحة. الرجاء التحقق من البريد الإلكتروني ورقم الجوال');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ في تسجيل الدخول. الرجاء المحاولة مرة أخرى');
+            } finally {
+                form.classList.remove('loading');
+            }
+        });
+    </script>
+</body>
+</html> 

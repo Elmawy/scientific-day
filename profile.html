@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الشخصية - اليوم العلمي</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <h2>مرحبا بك في اليوم العلمي لمجلس السماع والتعليق لكتاب أخصر المختصرات لابن بدران الحنبلي بجامع عائشة الراجحي بمكة المكرمة</h2>
+            <div id="userInfo">
+                <p>الاسم: <span id="userName"></span></p>
+                <p>البريد الإلكتروني: <span id="userEmail"></span></p>
+                <p>رقم الجوال: <span id="userPhone"></span></p>
+                <p>نوع المشاركة: <span id="userType"></span></p>
+                <p>الدولة: <span id="userCountry"></span></p>
+            </div>
+            <button id="attendanceBtn">تسجيل الحضور</button>
+            <button id="certificateBtn" class="hidden">تحميل الشهادة</button>
+            <button id="logoutBtn">تسجيل خروج</button>
+        </div>
+    </div>
+    <script src="profile.js"></script>
+</body>
+</html> 
