@@ -1,4 +1,4 @@
-async function checkCertificate() {
+async function downloadCertificate() {
     const email = localStorage.getItem('userEmail');
     const phone = localStorage.getItem('userPhone');
 
@@ -8,18 +8,13 @@ async function checkCertificate() {
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
 
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await fetch(url, { method: 'GET' });
+        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة
 
-        if (data.success && data.certificateUrl) {
-            document.getElementById('certificateBtn').onclick = function () {
-                window.open(data.certificateUrl, '_blank'); // ✅ يفتح الشهادة في نافذة جديدة
-            };
-            document.getElementById('certificateBtn').textContent = 'تحميل الشهادة';
-            document.getElementById('certificateBtn').disabled = false;
+        if (certificateUrl.startsWith("http")) {
+            window.location.href = certificateUrl; // ✅ فتح رابط الشهادة مباشرة
         } else {
-            document.getElementById('certificateBtn').textContent = 'الشهادة غير متوفرة بعد';
-            document.getElementById('certificateBtn').disabled = true;
+            alert(certificateUrl); // عرض أي رسالة خطأ إذا لم يتم العثور على الشهادة
         }
     } catch (error) {
         console.error('Error:', error);
