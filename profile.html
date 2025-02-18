@@ -3,299 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الملف الشخصي - اليوم العلمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>البيانات الشخصية - اليوم العلمي</title>
     <style>
-        :root {
-            --primary-color: #005C97;
-            --secondary-color: #363795;
-            --accent-color: #00BCD4;
-            --text-color: #2C3E50;
-            --background-color: #F5F7FA;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--background-color);
-            font-family: 'Tajawal', sans-serif;
-            color: var(--text-color);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
+            background-color: #f5f5f5;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
 
         .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        .profile-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            position: relative;
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .profile-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
-            border-radius: 0 15px 15px 0;
+        .logo img {
+            max-width: 200px;
+            height: auto;
         }
 
-        .profile-card h2 {
-            color: var(--primary-color);
+        h1 {
+            color: #333;
             text-align: center;
             margin-bottom: 30px;
-            font-size: 1.8rem;
+            font-size: 24px;
         }
 
         .user-info {
             margin-bottom: 30px;
         }
 
-        .user-info p {
-            margin: 15px 0;
+        .info-item {
+            margin-bottom: 15px;
             padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info p strong {
-            color: var(--primary-color);
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            margin: 10px 0;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        #logout {
-            background: #dc3545;
+            gap: 10px;
             margin-top: 20px;
         }
 
-        .status-badge {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
+        .action-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .status-present {
-            background: #28a745;
+        .attendance-button {
+            background-color: #4CAF50;
             color: white;
         }
 
-        .status-absent {
-            background: #dc3545;
+        .attendance-button:hover {
+            background-color: #45a049;
+        }
+
+        .attendance-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .certificate-button {
+            background-color: #2196F3;
             color: white;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
+        .certificate-button:hover {
+            background-color: #1e88e5;
+        }
 
-            .profile-card {
-                padding: 20px;
-            }
+        .certificate-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
 
-            button {
-                padding: 10px 20px;
-            }
+        .logout-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #e53935;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="profile-card">
-            <h2>بيانات المشارك</h2>
-            <div class="user-info">
-                <p><strong>الاسم:</strong> <span id="userName">-</span></p>
-                <p><strong>البريد الإلكتروني:</strong> <span id="userEmail">-</span></p>
-                <p><strong>رقم الجوال:</strong> <span id="userPhone">-</span></p>
-                <p><strong>الجنس:</strong> <span id="userGender">-</span></p>
-                <p><strong>نوع المشاركة:</strong> <span id="userType">-</span></p>
-                <p><strong>الدولة:</strong> <span id="userCountry">-</span></p>
-                <p><strong>حالة الحضور:</strong> <span id="attendanceStatus" class="status-badge">-</span></p>
+        <div class="logo">
+            <img src="https://placehold.co/200x100" alt="شعار اليوم العلمي">
+        </div>
+        <h1>البيانات الشخصية - اليوم العلمي</h1>
+
+        <div class="user-info">
+            <div class="info-item">
+                <div class="info-label">الاسم:</div>
+                <div class="info-value" id="userName">-</div>
             </div>
-            
-            <div id="attendanceActions">
-                <button id="markAttendance" style="display: none;">تسجيل الحضور</button>
-                <button id="downloadCertificate" style="display: none;">تحميل الشهادة</button>
+            <div class="info-item">
+                <div class="info-label">البريد الإلكتروني:</div>
+                <div class="info-value" id="userEmail">-</div>
             </div>
-            
-            <button id="logout">تسجيل الخروج</button>
+            <div class="info-item">
+                <div class="info-label">رقم الجوال:</div>
+                <div class="info-value" id="userPhone">-</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">حالة الحضور:</div>
+                <div class="info-value" id="attendanceStatus">-</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="attendanceButton" class="action-button attendance-button" onclick="markAttendance()">تسجيل الحضور</button>
+            <button id="certificateButton" class="action-button certificate-button" onclick="getCertificate()">تحميل الشهادة</button>
+            <button class="action-button logout-button" onclick="logout()">تسجيل الخروج</button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('تحميل الصفحة');
-            
-            // التحقق من وجود بيانات المستخدم
-            const userData = {
-                email: localStorage.getItem('userEmail'),
-                phone: localStorage.getItem('userPhone'),
-                name: localStorage.getItem('userName'),
-                gender: localStorage.getItem('userGender'),
-                type: localStorage.getItem('userType'),
-                country: localStorage.getItem('userCountry'),
-                attendanceStatus: localStorage.getItem('attendanceStatus') === 'true'
-            };
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
+        let userData;
 
-            console.log('البيانات المخزنة:', userData);
-
-            if (!userData.email || !userData.phone) {
-                console.log('لم يتم العثور على بيانات المستخدم، جاري التوجيه إلى صفحة تسجيل الدخول');
+        window.onload = function() {
+            const userDataString = localStorage.getItem('userData');
+            if (!userDataString) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            // عرض بيانات المستخدم
+            try {
+                userData = JSON.parse(userDataString);
+                displayUserData();
+                updateButtons();
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                window.location.href = 'login.html';
+            }
+        };
+
+        function displayUserData() {
             document.getElementById('userName').textContent = userData.name || '-';
             document.getElementById('userEmail').textContent = userData.email || '-';
             document.getElementById('userPhone').textContent = userData.phone || '-';
-            document.getElementById('userGender').textContent = userData.gender || '-';
-            document.getElementById('userType').textContent = userData.type || '-';
-            document.getElementById('userCountry').textContent = userData.country || '-';
-            
-            // تحديث حالة الحضور
-            const attendanceStatusElement = document.getElementById('attendanceStatus');
-            if (userData.attendanceStatus) {
-                attendanceStatusElement.textContent = 'حاضر';
-                attendanceStatusElement.classList.add('status-present');
-            } else {
-                attendanceStatusElement.textContent = 'غير مسجل';
-                attendanceStatusElement.classList.add('status-absent');
+            document.getElementById('attendanceStatus').textContent = userData.attendance || 'لم يتم التسجيل';
+        }
+
+        function updateButtons() {
+            const attendanceButton = document.getElementById('attendanceButton');
+            const certificateButton = document.getElementById('certificateButton');
+
+            if (userData.attendance) {
+                attendanceButton.disabled = true;
+                attendanceButton.textContent = 'تم تسجيل الحضور';
             }
 
-            // إدارة الأزرار
-            const markAttendanceBtn = document.getElementById('markAttendance');
-            const downloadCertificateBtn = document.getElementById('downloadCertificate');
-
-            if (!userData.attendanceStatus) {
-                markAttendanceBtn.style.display = 'block';
-            } else {
-                downloadCertificateBtn.style.display = 'block';
+            if (!userData.certificateLink) {
+                certificateButton.disabled = true;
+                certificateButton.textContent = 'الشهادة غير متوفرة';
             }
+        }
 
-            // معالجة تسجيل الحضور
-            markAttendanceBtn.addEventListener('click', async function() {
-                try {
-                    console.log('محاولة تسجيل الحضور');
-                    markAttendanceBtn.disabled = true;
-                    markAttendanceBtn.textContent = 'جاري تسجيل الحضور...';
+        function markAttendance() {
+            const url = `${SCRIPT_URL}?action=markAttendance&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
 
-                    const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
-                    url.searchParams.append('action', 'markAttendance');
-                    url.searchParams.append('email', userData.email);
-                    url.searchParams.append('phone', userData.phone);
-
-                    console.log('إرسال طلب إلى:', url.toString());
-
-                    const response = await fetch(url);
-                    console.log('استجابة الخادم:', response.status);
-                    
-                    const data = await response.json();
-                    console.log('بيانات الاستجابة:', data);
-
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
                     if (data.success) {
-                        localStorage.setItem('attendanceStatus', 'true');
-                        console.log('تم تسجيل الحضور بنجاح');
-                        window.location.reload();
+                        userData.attendance = 'حاضر';
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        displayUserData();
+                        updateButtons();
+                        alert('تم تسجيل الحضور بنجاح');
                     } else {
-                        throw new Error(data.message || 'فشل تسجيل الحضور');
+                        alert(data.message || 'حدث خطأ في تسجيل الحضور');
                     }
-                } catch (error) {
-                    console.error('خطأ:', error);
-                    alert(error.message || 'حدث خطأ أثناء تسجيل الحضور');
-                    markAttendanceBtn.disabled = false;
-                    markAttendanceBtn.textContent = 'تسجيل الحضور';
-                }
-            });
+                })
+                .catch(error => {
+                    console.error('Error marking attendance:', error);
+                    alert('حدث خطأ في الاتصال بالخادم');
+                });
+        }
 
-            // معالجة تحميل الشهادة
-            downloadCertificateBtn.addEventListener('click', async function() {
-                try {
-                    console.log('محاولة تحميل الشهادة');
-                    downloadCertificateBtn.disabled = true;
-                    downloadCertificateBtn.textContent = 'جاري تحميل الشهادة...';
+        function getCertificate() {
+            const url = `${SCRIPT_URL}?action=getCertificate&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
 
-                    const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
-                    url.searchParams.append('action', 'getCertificate');
-                    url.searchParams.append('email', userData.email);
-                    url.searchParams.append('phone', userData.phone);
-
-                    console.log('إرسال طلب إلى:', url.toString());
-
-                    const response = await fetch(url);
-                    console.log('استجابة الخادم:', response.status);
-                    
-                    const data = await response.json();
-                    console.log('بيانات الاستجابة:', data);
-
-                    if (data.success && data.certificateUrl) {
-                        window.open(data.certificateUrl, '_blank');
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.certificateLink) {
+                        window.open(data.certificateLink, '_blank');
                     } else {
-                        throw new Error(data.message || 'الشهادة غير متوفرة حالياً');
+                        alert(data.message || 'الشهادة غير متوفرة');
                     }
-                } catch (error) {
-                    console.error('خطأ:', error);
-                    alert(error.message || 'حدث خطأ أثناء تحميل الشهادة');
-                } finally {
-                    downloadCertificateBtn.disabled = false;
-                    downloadCertificateBtn.textContent = 'تحميل الشهادة';
-                }
-            });
+                })
+                .catch(error => {
+                    console.error('Error getting certificate:', error);
+                    alert('حدث خطأ في الاتصال بالخادم');
+                });
+        }
 
-            // معالجة تسجيل الخروج
-            document.getElementById('logout').addEventListener('click', function() {
-                console.log('تسجيل الخروج');
-                localStorage.clear();
-                window.location.href = 'login.html';
-            });
-        });
+        function logout() {
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
 </html>
