@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البيانات الشخصية - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #005C97;
@@ -12,6 +13,8 @@
             --accent-color: #00BCD4;
             --text-color: #2C3E50;
             --background-color: #F5F7FA;
+            --success-color: #28a745;
+            --error-color: #dc3545;
         }
 
         * {
@@ -32,6 +35,7 @@
             padding: 15px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            position: relative;
         }
 
         .logo-container {
@@ -46,6 +50,11 @@
         .logo {
             height: 60px;
             object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .container {
@@ -60,39 +69,56 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
         }
 
-        .profile-header {
+        .welcome-banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-header h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
+            animation: slideDown 0.5s ease;
         }
 
         .info-group {
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 20px;
             background: rgba(0,92,151,0.03);
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,92,151,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-group:hover {
+            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
+            transform: translateY(-2px);
         }
 
         .info-group h3 {
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
         }
 
         .info-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
 
         .info-item:last-child {
             border-bottom: none;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+            margin-left: 10px;
         }
 
         .button {
@@ -105,15 +131,26 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .button:hover {
             background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .button:disabled {
             background: #ccc;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button i {
+            font-size: 18px;
         }
 
         .button-group {
@@ -121,6 +158,94 @@
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .attendance-status {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: var(--success-color);
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -135,135 +260,311 @@
             .logo {
                 height: 40px;
             }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logout-btn {
+                position: static;
+                margin: 10px auto;
+                width: fit-content;
+            }
+
+            .info-item {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
     </style>
 </head>
-<body>
-    <header class="header">
-        <div class="logo-container">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
-        </div>
-    </header>
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البيانات الشخصية - اليوم العلمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #005C97;
+            --secondary-color: #363795;
+            --accent-color: #00BCD4;
+            --text-color: #2C3E50;
+            --background-color: #F5F7FA;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
 
-    <div class="container">
-        <div class="profile-card">
-            <div class="profile-header">
-                <h1>البيانات الشخصية</h1>
-                <p>مرحباً بك في صفحتك الشخصية</p>
-            </div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            <div class="info-group">
-                <h3>معلومات المستخدم</h3>
-                <div class="info-item">
-                    <span>الاسم:</span>
-                    <span id="userName">-</span>
-                </div>
-                <div class="info-item">
-                    <span>البريد الإلكتروني:</span>
-                    <span id="userEmail">-</span>
-                </div>
-                <div class="info-item">
-                    <span>رقم الجوال:</span>
-                    <span id="userPhone">-</span>
-                </div>
-                <div class="info-item">
-                    <span>الجنس:</span>
-                    <span id="userGender">-</span>
-                </div>
-                <div class="info-item">
-                    <span>نوع المشاركة:</span>
-                    <span id="userType">-</span>
-                </div>
-                <div class="info-item">
-                    <span>الدولة:</span>
-                    <span id="userCountry">-</span>
-                </div>
-            </div>
+        body {
+            background-color: var(--background-color);
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
 
-            <div class="button-group">
-                <button id="attendanceBtn" class="button" onclick="markAttendance()">تسجيل الحضور</button>
-                <button id="certificateBtn" class="button" onclick="downloadCertificate()">تحميل الشهادة</button>
-            </div>
-        </div>
-    </div>
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
 
-    <script>
-        window.onload = function() {
-            if (!localStorage.getItem('userEmail')) {
-                window.location.href = 'login.html';
-                return;
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            height: 60px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(0,92,151,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(0,92,151,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-group:hover {
+            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
+            transform: translateY(-2px);
+        }
+
+        .info-group h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+            margin-left: 10px;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button i {
+            font-size: 18px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .attendance-status {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: var(--success-color);
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-20px);
+                opacity: 0;
             }
-            loadUserData();
-        };
-
-        function loadUserData() {
-            document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
-
-            const attendanceStatus = localStorage.getItem('attendanceStatus');
-            if (attendanceStatus === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
+            to { 
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
-        async function markAttendance() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
-
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-                    alert('تم تسجيل حضورك بنجاح');
-                } else {
-                    alert(data.message || 'حدث خطأ في تسجيل الحضور');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('حدث خطأ في تسجيل الحضور');
+        @keyframes slideUp {
+            from { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
-        async function downloadCertificate() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
 
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-                url.searchParams.append('action', 'getCertificate');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+            .profile-card {
+                padding: 20px;
+            }
 
-                const response = await fetch(url);
-                const data = await response.json();
+            .logo {
+                height: 40px;
+            }
 
-                console.log('Response data:', data);
+            .button-group {
+                flex-direction: column;
+            }
 
-                if (data.success) {
-                    window.open(data.certificateUrl, '_blank');
-                } else {
-                    alert(data.message || 'لم يتم العثور على الشهادة');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('حدث خطأ في تحميل الشهادة');
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logout-btn {
+                position: static;
+                margin: 10px auto;
+                width: fit-content;
+            }
+
+            .info-item {
+                flex-direction: column;
+                gap: 5px;
             }
         }
-    </script>
-</body>
-</html>
+    </style>
+</head>
