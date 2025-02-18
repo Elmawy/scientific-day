@@ -3,20 +3,23 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
+        // 1. بناء الرابط
         const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
 
+        // 2. إرسال الطلب
         const response = await fetch(url);
-        const certificateUrl = await response.text();
-        
-        console.log("Certificate URL:", certificateUrl);
+        const data = await response.json(); // تحويل الاستجابة إلى JSON
 
-        if (certificateUrl.startsWith("http")) {
-            window.open(certificateUrl, '_blank');
+        // 3. التحقق من النجاح
+        if (data.success) {
+            // 4. فتح رابط الشهادة في نافذة جديدة
+            window.open(data.certificateUrl, '_blank');
         } else {
-            alert(certificateUrl); // سيعرض رسالة الخطأ من السيرفر
+            // 5. عرض رسالة الخطأ
+            alert(data.message || 'لم يتم العثور على الشهادة');
         }
     } catch (error) {
         console.error('Error:', error);
