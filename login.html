@@ -4,49 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - اليوم العلمي</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- إضافة الميتا تاج للتطبيقات -->
-    <meta name="description" content="تسجيل الدخول لليوم العلمي لمجلس السماع والتعليق لكتاب أخصر المختصرات">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="icon" type="image/png" href="icon.png">
-    <!-- تحسين الشكل على الجوال -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #005C97;
+            --secondary-color: #363795;
+            --accent-color: #00BCD4;
+            --text-color: #2C3E50;
+            --background-color: #F5F7FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text-color);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .login-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            border-radius: 0 15px 15px 0;
+        }
+
+        .login-form h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        }
+
         .loading {
             opacity: 0.7;
             pointer-events: none;
         }
+
         .loading button {
             position: relative;
-            color: transparent !important;  /* إخفاء النص الأصلي */
+            color: transparent !important;
         }
+
         .loading button:after {
             content: "...جاري التحميل";
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            color: #000;  /* لون النص */
+            color: white;
+            font-family: 'Tajawal', sans-serif;
         }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
                 margin: 0;
-                height: 100vh;
             }
+
             .login-form {
-                width: 100%;
-                max-width: 100%;
-                border-radius: 0;
+                border-radius: 10px;
+                padding: 20px;
+                margin: 10px;
             }
-            input {
-                font-size: 16px; /* لمنع التكبير التلقائي في iOS */
+
+            .logo {
+                max-width: 120px;
+            }
+
+            .login-form h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logos">
+            <img src="./شعار الجامع.png" alt="شعار الجامع" class="logo">
+            <img src="./شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+        </div>
+
         <div class="login-form">
             <h2>تسجيل الدخول لليوم العلمي</h2>
             <form id="loginForm">
@@ -62,16 +195,17 @@
             </form>
         </div>
     </div>
+
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const form = this;
             form.classList.add('loading');
-            
+
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
-            
+
             try {
                 const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
                 url.searchParams.append('action', 'verifyUser');
@@ -83,8 +217,7 @@
                 });
 
                 const data = await response.json();
-                console.log('Response:', data); // للتحقق من الاستجابة
-                
+
                 if (data && data.success) {
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('userPhone', phone);
@@ -106,4 +239,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
