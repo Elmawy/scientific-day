@@ -3,76 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اليوم العلمي - الصفحة الرئيسية</title>
+    <title>اليوم العلمي - مجلس سماع كتاب أخصر المختصرات</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background-color: #f4f3ee;
+            background-color: #f8f9fa;
             font-family: 'Tajawal', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
         }
         .header {
-            background: #0d6efd;
+            background: linear-gradient(to right, #0d6efd, #6610f2);
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             font-size: 2rem;
             font-weight: bold;
             border-bottom: 5px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 50px auto;
             background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
         .motivation {
-            background: #eef0f3;
+            background: linear-gradient(to right, #f8f9fa, #eef0f3);
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1.4rem;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
             color: #333;
             font-weight: bold;
-            border-right: 6px solid #0d6efd;
-            padding-right: 15px;
+            border-right: 8px solid #0d6efd;
+            padding-right: 20px;
             line-height: 1.8;
         }
         .logos {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
         }
         .logo {
-            width: 140px;
+            width: 160px;
             height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+        .logo:hover {
+            transform: scale(1.1);
         }
         .buttons {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
         }
         .btn {
-            width: 80%;
-            padding: 15px;
+            width: 85%;
+            padding: 18px;
             border: none;
-            background-color: #198754;
+            background: linear-gradient(to right, #198754, #28a745);
             color: white;
-            font-size: 1.4rem;
-            border-radius: 8px;
+            font-size: 1.5rem;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease-in-out;
             font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
         }
         .btn:hover {
-            background-color: #145c32;
+            background: linear-gradient(to right, #145c32, #1d7e43);
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -92,7 +100,6 @@
         </div>
         <div class="buttons">
             <button class="btn" onclick="location.href='login.html'">🔑 تسجيل الدخول</button>
-            <button class="btn" onclick="location.href='profile.html'">📜 الصفحة الشخصية</button>
         </div>
     </div>
 </body>
