@@ -16,7 +16,7 @@ function loadUserData() {
     if (localStorage.getItem('attendanceStatus') === 'true') {
         document.getElementById('attendanceBtn').disabled = true;
         document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-        checkCertificate(); // ✅ تحميل الشهادة مباشرة عند تحميل الصفحة
+        checkCertificate(); // ✅ التحقق من رابط الشهادة بعد تسجيل الحضور
     }
 }
 
@@ -39,7 +39,7 @@ async function markAttendance() {
             document.getElementById('attendanceBtn').disabled = true;
             document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
             alert('تم تسجيل حضورك بنجاح');
-            checkCertificate();
+            checkCertificate(); // ✅ تحقق من الشهادة بعد تسجيل الحضور مباشرة
         } else {
             alert(data.message || 'حدث خطأ في تسجيل الحضور');
         }
@@ -49,7 +49,7 @@ async function markAttendance() {
     }
 }
 
-// ✅ التحقق من توفر رابط الشهادة
+// ✅ التحقق من توفر رابط الشهادة بعد تسجيل الحضور
 async function checkCertificate() {
     const email = localStorage.getItem('userEmail');
     const phone = localStorage.getItem('userPhone');
