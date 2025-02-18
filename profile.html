@@ -19,8 +19,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
-        <script src="profile.js" defer></script>
 
         body {
             background-color: var(--background-color);
@@ -185,13 +183,12 @@
 
             <div class="button-group">
                 <button id="attendanceBtn" class="button" onclick="markAttendance()">تسجيل الحضور</button>
-                <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>تحميل الشهادة</button>
+                <button id="certificateBtn" class="button" onclick="downloadCertificate()">تحميل الشهادة</button>
             </div>
         </div>
     </div>
 
     <script>
-        // التحقق من تسجيل الدخول
         window.onload = function() {
             if (!localStorage.getItem('userEmail')) {
                 window.location.href = 'login.html';
@@ -200,7 +197,6 @@
             loadUserData();
         };
 
-        // تحميل بيانات المستخدم
         function loadUserData() {
             document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
             document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
@@ -213,11 +209,9 @@
             if (attendanceStatus === 'true') {
                 document.getElementById('attendanceBtn').disabled = true;
                 document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-                document.getElementById('certificateBtn').disabled = false;
             }
         }
 
-        // تسجيل الحضور
         async function markAttendance() {
             const email = localStorage.getItem('userEmail');
             const phone = localStorage.getItem('userPhone');
@@ -235,7 +229,6 @@
                     localStorage.setItem('attendanceStatus', 'true');
                     document.getElementById('attendanceBtn').disabled = true;
                     document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-                    document.getElementById('certificateBtn').disabled = false;
                     alert('تم تسجيل حضورك بنجاح');
                 } else {
                     alert(data.message || 'حدث خطأ في تسجيل الحضور');
@@ -246,7 +239,6 @@
             }
         }
 
-        // تحميل الشهادة
         async function downloadCertificate() {
             const email = localStorage.getItem('userEmail');
             const phone = localStorage.getItem('userPhone');
@@ -257,7 +249,16 @@
                 url.searchParams.append('email', email);
                 url.searchParams.append('phone', phone);
 
-                window.open(url.toString(), '_blank');
+                const response = await fetch(url);
+                const data = await response.json();
+
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    window.open(data.certificateUrl, '_blank');
+                } else {
+                    alert(data.message || 'لم يتم العثور على الشهادة');
+                }
             } catch (error) {
                 console.error('Error:', error);
                 alert('حدث خطأ في تحميل الشهادة');
