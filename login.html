@@ -179,7 +179,7 @@
 
         <div class="login-form">
             <h2>تسجيل الدخول لليوم العلمي</h2>
-          
+
             <div class="login-options">
                 <div class="login-option active" onclick="switchLoginMethod('code')">الدخول برمز الحضور</div>
                 <div class="login-option" onclick="switchLoginMethod('credentials')">الدخول بالبيانات</div>
@@ -214,40 +214,38 @@
             const codeLogin = document.getElementById('codeLogin');
             const credentialsLogin = document.getElementById('credentialsLogin');
             const options = document.querySelectorAll('.login-option');
-          
+
             options.forEach(option => option.classList.remove('active'));
-          
+
             if (method === 'code') {
                 codeLogin.style.display = 'block';
                 credentialsLogin.style.display = 'none';
                 options[0].classList.add('active');
-                // تفريغ حقول البيانات
                 document.getElementById('email').value = '';
                 document.getElementById('phone').value = '';
             } else {
                 codeLogin.style.display = 'none';
                 credentialsLogin.style.display = 'block';
                 options[1].classList.add('active');
-                // تفريغ حقل الرمز
                 document.getElementById('attendanceCode').value = '';
             }
         }
 
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-          
+
             const form = this;
             form.classList.add('loading');
-          
+
             const attendanceCode = document.getElementById('attendanceCode').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
-          
+
             try {
                 console.log('Attempting login...');
                 const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
                 url.searchParams.append('action', 'verifyUser');
-              
+
                 if (attendanceCode) {
                     url.searchParams.append('attendanceCode', attendanceCode);
                 } else if (email && phone) {
@@ -263,16 +261,10 @@
 
                 if (data && data.success) {
                     console.log('Login successful, storing data...');
-                    localStorage.setItem('userEmail', data.data.email);
-                    localStorage.setItem('userPhone', data.data.phone);
-                    localStorage.setItem('userName', data.data.name);
-                    localStorage.setItem('userGender', data.data.gender);
-                    localStorage.setItem('userType', data.data.type);
-                    localStorage.setItem('userCountry', data.data.country);
-                    localStorage.setItem('attendanceStatus', data.data.attendanceStatus || 'false');
-                  
+                    // تخزين البيانات كاملة في كائن واحد
+                    localStorage.setItem('userData', JSON.stringify(data.data));
                     console.log('Data stored, redirecting...');
-                    window.location.replace('./profile.html');
+                    window.location.href = './profile.html';
                 } else {
                     throw new Error(data.message || 'لم يتم العثور على المستخدم');
                 }
@@ -286,4 +278,3 @@
     </script>
 </body>
 </html>
-
