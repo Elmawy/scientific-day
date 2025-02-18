@@ -3,31 +3,23 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'); // استبدل بـ Script ID الصحيح
+        const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
 
-        const response = await fetch(url, { method: 'GET' });
-        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة
-
-        console.log("رابط الشهادة:", certificateUrl); // ✅ تأكيد أن الرابط يتم استرجاعه
+        const response = await fetch(url);
+        const certificateUrl = await response.text();
+        
+        console.log("Certificate URL:", certificateUrl);
 
         if (certificateUrl.startsWith("http")) {
-            window.location.href = certificateUrl; // ✅ يفتح رابط الشهادة مباشرة
+            window.open(certificateUrl, '_blank');
         } else {
-            alert(certificateUrl); // عرض أي رسالة خطأ إذا لم يتم العثور على الشهادة
+            alert(certificateUrl); // سيعرض رسالة الخطأ من السيرفر
         }
     } catch (error) {
         console.error('Error:', error);
         alert('حدث خطأ في تحميل الشهادة');
     }
 }
-
-// تأكد من أن الزر يستدعي `downloadCertificate` عند النقر عليه
-document.addEventListener("DOMContentLoaded", function () {
-    const certificateBtn = document.getElementById("certificateBtn");
-    if (certificateBtn) {
-        certificateBtn.addEventListener("click", downloadCertificate);
-    }
-});
