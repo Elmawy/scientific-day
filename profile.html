@@ -329,100 +329,90 @@
 
     <script>
         window.onload = function() {
-            if (!localStorage.getItem('userEmail')) {
-                window.location.href = 'index.html';
-                return;
-            }
-            loadUserData();
-        };
+    const userData = JSON.parse(localStorage.getItem('userData'));
 
-        function loadUserData() {
-            document.getElementById('welcomeName').textContent = localStorage.getItem('userName')?.split(' ')[0] || 'زائرنا الكريم';
-            document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
+    if (!userData || !userData.email) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-            const attendanceStatus = localStorage.getItem('attendanceStatus');
-            if (attendanceStatus === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                document.getElementById('certificateBtn').disabled = false;
-                document.getElementById('attendanceStatus').style.display = 'block';
-            }
+    loadUserData(userData);
+};
+
+function loadUserData(userData) {
+    document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+    document.getElementById('userName').textContent = userData.name || '-';
+    document.getElementById('userEmail').textContent = userData.email || '-';
+    document.getElementById('userPhone').textContent = userData.phone || '-';
+    document.getElementById('userGender').textContent = userData.gender || '-';
+    document.getElementById('userType').textContent = userData.type || '-';
+    document.getElementById('userCountry').textContent = userData.country || '-';
+
+    if (localStorage.getItem('attendanceStatus') === 'true') {
+        document.getElementById('attendanceBtn').disabled = true;
+        document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
+        document.getElementById('certificateBtn').disabled = false;
+        document.getElementById('attendanceStatus').style.display = 'block';
+    }
+}
+
+async function markAttendance() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+
+    try {
+        const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+        url.searchParams.append('action', 'markAttendance');
+        url.searchParams.append('email', userData.email);
+        url.searchParams.append('phone', userData.phone);
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.success) {
+            localStorage.setItem('attendanceStatus', 'true');
+            document.getElementById('attendanceBtn').disabled = true;
+            document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
+            document.getElementById('certificateBtn').disabled = false;
+            document.getElementById('attendanceStatus').style.display = 'block';
+            showToast('✅ تم تسجيل حضورك بنجاح!', true);
+        } else {
+            showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
         }
+    } catch (error) {
+        console.error('⚠️ خطأ:', error);
+        showToast('❌ حدث خطأ في تسجيل الحضور', false);
+    }
+}
 
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.background = isSuccess ? '#e8f5e9' : '#ffebee';
-            toast.style.color = isSuccess ? '#2e7d32' : '#c62828';
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+async function downloadCertificate() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+
+    try {
+        const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+        url.searchParams.append('action', 'getCertificate');
+        url.searchParams.append('email', userData.email);
+        url.searchParams.append('phone', userData.phone);
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.success) {
+            window.open(data.certificateUrl, '_blank');
+            showToast('📜 جاري تحميل الشهادة...', true);
+        } else {
+            showToast(data.message || '❌ لم يتم العثور على الشهادة', false);
         }
+    } catch (error) {
+        console.error('⚠️ خطأ:', error);
+        showToast('❌ حدث خطأ في تحميل الشهادة', false);
+    }
+}
 
-        async function markAttendance() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
+function logout() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+}
 
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                    document.getElementById('certificateBtn').disabled = false;
-                    document.getElementById('attendanceStatus').style.display = 'block';
-                    showToast('تم تسجيل حضورك بنجاح!', true);
-                } else {
-                    showToast(data.message || 'حدث خطأ في تسجيل الحضور', false);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('حدث خطأ في تسجيل الحضور', false);
-            }
-        }
-
-        async function downloadCertificate() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
-
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
-                url.searchParams.append('action', 'getCertificate');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    window.open(data.certificateUrl, '_blank');
-                    showToast('جاري تحميل الشهادة...', true);
-                } else {
-                    showToast(data.message || 'لم يتم العثور على الشهادة', false);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('حدث خطأ في تحميل الشهادة', false);
-            }
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
     </script>
 </body>
 </html>
