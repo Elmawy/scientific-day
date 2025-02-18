@@ -27,14 +27,25 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 15px 40px;
             background: white;
+            gap: 20px;
         }
 
         .header img {
             height: 40px;
+        }
+
+        .logout-button {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .container {
@@ -57,51 +68,15 @@
             text-align: center;
         }
 
-        .welcome-section h2 {
-            font-size: 20px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
         .info-section {
             padding: 25px;
-        }
-
-        .info-title {
-            color: var(--text-color);
-            margin-bottom: 20px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 15px;
+            gap: 10px 50px;
             margin-bottom: 25px;
-        }
-
-        .info-label {
-            color: var(--text-color);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 120px;
-        }
-
-        .info-label i {
-            color: var(--primary-color);
-            width: 20px;
-        }
-
-        .info-value {
-            color: #666;
         }
 
         .actions {
@@ -111,8 +86,7 @@
 
         .action-button {
             flex: 1;
-            padding: 12px 20px;
-            border: none;
+            padding: 12px;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
@@ -124,105 +98,47 @@
             transition: all 0.3s ease;
         }
 
-        .attendance-button {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .certificate-button {
-            background-color: #808080;
-            color: white;
-        }
-
-        .action-button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-            
-            .container {
-                padding: 0 15px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-        }
+        .attendance-button { background-color: var(--primary-color); color: white; }
+        .certificate-button { background-color: #808080; color: white; }
+        .action-button:disabled { opacity: 0.7; cursor: not-allowed; }
     </style>
 </head>
-<body>
+<body onload="fetchUserData()">
     <div class="header">
-        <img src="شعار الجامع.png" alt="شعار الجامعة">
-        <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية">
+        <img src="logo1.png" alt="Logo1">
+        <img src="logo2.png" alt="Logo2">
     </div>
-
+    <div style="text-align: left; padding: 10px;">
+        <button class="logout-button"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+    </div>
     <div class="container">
         <div class="card">
             <div class="welcome-section">
-                <h2>
-                    <i class="fas fa-user-circle"></i>
-                    حياك الله، وئام
-                </h2>
+                <h2><i class="fas fa-user-circle"></i> حياك الله، <span id="userName">وئام</span></h2>
                 <p>يسعدنا بوجودك معنا في اليوم العلمي</p>
             </div>
 
             <div class="info-section">
-                <h3 class="info-title">
-                    <i class="fas fa-info-circle"></i>
-                    معلومات المستخدم
-                </h3>
-
                 <div class="info-grid">
-                    <div class="info-label">
-                        <i class="fas fa-user"></i>
-                        الاسم:
-                    </div>
-                    <div class="info-value" id="userName">وئام عبد النور أوملي</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-envelope"></i>
-                        البريد الإلكتروني:
-                    </div>
-                    <div class="info-value" id="userEmail">oumelii.ouiam@gmail.com</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-phone"></i>
-                        رقم الجوال:
-                    </div>
-                    <div class="info-value" id="userPhone">0506146629</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-venus-mars"></i>
-                        الجنس:
-                    </div>
-                    <div class="info-value" id="userGender">أنثى</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-video"></i>
-                        نوع المشاركة:
-                    </div>
-                    <div class="info-value" id="participationType">عن بعد (البث المباشر)</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-globe"></i>
-                        الدولة:
-                    </div>
-                    <div class="info-value" id="userCountry">السعودية مكة</div>
+                    <div class="info-label"><i class="fas fa-user"></i> الاسم:</div>
+                    <div id="userNameData">وئام عبد النور أوملي</div>
+                    <div class="info-label"><i class="fas fa-envelope"></i> البريد الإلكتروني:</div>
+                    <div id="userEmail">oumelii.ouiam@gmail.com</div>
+                    <div class="info-label"><i class="fas fa-phone"></i> رقم الجوال:</div>
+                    <div id="userPhone">0506146629</div>
+                    <div class="info-label"><i class="fas fa-male"></i> الجنس:</div>
+                    <div id="userGender">تحميل...</div>
+                    <div class="info-label"><i class="fas fa-check"></i> نوع المشاركة:</div>
+                    <div id="userParticipation">تحميل...</div>
+                    <div class="info-label"><i class="fas fa-globe"></i> الدولة:</div>
+                    <div id="userCountry">تحميل...</div>
                 </div>
-
                 <div class="actions">
-                    <button class="action-button attendance-button" id="attendanceButton" onclick="markAttendance()">
-                        <i class="fas fa-check-circle"></i>
-                        تسجيل الحضور
+                    <button class="action-button attendance-button" onclick="markAttendance()">
+                        <i class="fas fa-check-circle"></i> تسجيل الحضور
                     </button>
-                    <button class="action-button certificate-button" id="certificateButton" onclick="getCertificate()">
-                        <i class="fas fa-certificate"></i>
-                        تحميل الشهادة
+                    <button class="action-button certificate-button" disabled>
+                        <i class="fas fa-certificate"></i> تحميل الشهادة
                     </button>
                 </div>
             </div>
@@ -230,95 +146,18 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
-        let userData;
-
-        window.onload = function() {
-            const userDataString = localStorage.getItem('userData');
-            if (!userDataString) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            try {
-                userData = JSON.parse(userDataString);
-                if (!userData || !userData.email) {
-                    throw new Error('Invalid user data');
-                }
-                displayUserData();
-                updateButtons();
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                localStorage.clear();
-                window.location.href = 'login.html';
-            }
-        };
-
-        function displayUserData() {
-            document.getElementById('userName').textContent = userData.name;
-            document.getElementById('userEmail').textContent = userData.email;
-            document.getElementById('userPhone').textContent = userData.phone;
-            document.getElementById('userGender').textContent = userData.gender || 'أنثى';
-            document.getElementById('participationType').textContent = userData.type || 'عن بعد (البث المباشر)';
-            document.getElementById('userCountry').textContent = userData.country || 'السعودية مكة';
+        async function fetchUserData() {
+            const email = "oumelii.ouiam@gmail.com"; // يجب جلبه ديناميكيًا
+            const phone = "0506146629";
+            const response = await fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=verifyUser&email=${email}&phone=${phone}`);
+            const data = await response.json();
             
-            // تحديث اسم الترحيب
-            const firstName = userData.name.split(' ')[0];
-            document.querySelector('.welcome-section h2').innerHTML = `
-                <i class="fas fa-user-circle"></i>
-                حياك الله، ${firstName}
-            `;
-        }
-
-        function updateButtons() {
-            const attendanceButton = document.getElementById('attendanceButton');
-            const certificateButton = document.getElementById('certificateButton');
-
-            if (userData.attendance === 'حاضر') {
-                attendanceButton.disabled = true;
-                attendanceButton.textContent = 'تم تسجيل الحضور';
-            }
-
-            if (!userData.certificateLink) {
-                certificateButton.disabled = true;
-                certificateButton.textContent = 'الشهادة غير متوفرة';
-            }
-        }
-
-        async function markAttendance() {
-            try {
-                const url = `${SCRIPT_URL}?action=markAttendance&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    userData.attendance = 'حاضر';
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    updateButtons();
-                    alert('تم تسجيل الحضور بنجاح');
-                } else {
-                    throw new Error(data.message || 'حدث خطأ في تسجيل الحضور');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message);
-            }
-        }
-
-        async function getCertificate() {
-            try {
-                const url = `${SCRIPT_URL}?action=getCertificate&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success && data.certificateLink) {
-                    window.open(data.certificateLink, '_blank');
-                } else {
-                    throw new Error(data.message || 'الشهادة غير متوفرة');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message);
+            if (data.success) {
+                document.getElementById("userGender").textContent = data.data.gender || "غير محدد";
+                document.getElementById("userParticipation").textContent = data.data.type || "غير محدد";
+                document.getElementById("userCountry").textContent = data.data.country || "غير محدد";
+            } else {
+                console.error("Failed to fetch user data");
             }
         }
     </script>
