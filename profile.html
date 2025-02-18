@@ -123,6 +123,19 @@
             margin-top: 20px;
         }
 
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -142,24 +155,41 @@
 
             <div class="info-group">
                 <h3>معلومات المستخدم</h3>
-                <div class="info-item"><span>الإسم الكامل:</span><span id="userName">-</span></div>
-                <div class="info-item"><span>الجنس:</span><span id="userGender">-</span></div>
-                <div class="info-item"><span>رقم الجوال:</span><span id="userPhone">-</span></div>
-                <div class="info-item"><span>البريد الإلكتروني:</span><span id="userEmail">-</span></div>
-                <div class="info-item"><span>نوع المشاركة:</span><span id="userType">-</span></div>
-                <div class="info-item"><span>الدولة:</span><span id="userCountry">-</span></div>
-                <div class="info-item"><span>رمز الحضور:</span><span id="usernum">-</span></div>
+                <div class="info-item">
+                    <span>الاسم:</span>
+                    <span id="userName">-</span>
+                </div>
+                <div class="info-item">
+                    <span>البريد الإلكتروني:</span>
+                    <span id="userEmail">-</span>
+                </div>
+                <div class="info-item">
+                    <span>رقم الجوال:</span>
+                    <span id="userPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <span>الجنس:</span>
+                    <span id="userGender">-</span>
+                </div>
+                <div class="info-item">
+                    <span>نوع المشاركة:</span>
+                    <span id="userType">-</span>
+                </div>
+                <div class="info-item">
+                    <span>الدولة:</span>
+                    <span id="userCountry">-</span>
+                </div>
             </div>
 
             <div class="button-group">
                 <button id="attendanceBtn" class="button" onclick="markAttendance()">تسجيل الحضور</button>
                 <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>تحميل الشهادة</button>
-                <button id="logoutBtn" class="button" onclick="logout()">تسجيل الخروج</button>
             </div>
         </div>
     </div>
 
     <script>
+        // التحقق من تسجيل الدخول
         window.onload = function() {
             if (!localStorage.getItem('userEmail')) {
                 window.location.href = 'login.html';
@@ -168,28 +198,53 @@
             loadUserData();
         };
 
+        // تحميل بيانات المستخدم
         function loadUserData() {
-            const fields = ["userName", "userGender", "userPhone", "userEmail", "userType", "userCountry", "usernum"];
-            
-            fields.forEach(field => {
-                document.getElementById(field).textContent = localStorage.getItem(field) || '-';
-            });
+            document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
+            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
+            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
+            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
+            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
+            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
 
-            if (localStorage.getItem('attendanceStatus') === 'true') {
+            const attendanceStatus = localStorage.getItem('attendanceStatus');
+            if (attendanceStatus === 'true') {
                 document.getElementById('attendanceBtn').disabled = true;
                 document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
                 document.getElementById('certificateBtn').disabled = false;
             }
         }
 
+        // تسجيل الحضور
         async function markAttendance() {
-            localStorage.setItem('attendanceStatus', 'true');
-            document.getElementById('attendanceBtn').disabled = true;
-            document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-            document.getElementById('certificateBtn').disabled = false;
-            alert('تم تسجيل حضورك بنجاح');
+            const email = localStorage.getItem('userEmail');
+            const phone = localStorage.getItem('userPhone');
+
+            try {
+                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                url.searchParams.append('action', 'markAttendance');
+                url.searchParams.append('email', email);
+                url.searchParams.append('phone', phone);
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('attendanceStatus', 'true');
+                    document.getElementById('attendanceBtn').disabled = true;
+                    document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
+                    document.getElementById('certificateBtn').disabled = false;
+                    alert('تم تسجيل حضورك بنجاح');
+                } else {
+                    alert(data.message || 'حدث خطأ في تسجيل الحضور');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ في تسجيل الحضور');
+            }
         }
 
+        // تحميل الشهادة
         async function downloadCertificate() {
             const email = localStorage.getItem('userEmail');
             const phone = localStorage.getItem('userPhone');
@@ -200,23 +255,11 @@
                 url.searchParams.append('email', email);
                 url.searchParams.append('phone', phone);
 
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success && data.certificateUrl) {
-                    window.open(data.certificateUrl, '_blank');
-                } else {
-                    alert('لم يتم العثور على رابط الشهادة.');
-                }
+                window.open(url.toString(), '_blank');
             } catch (error) {
                 console.error('Error:', error);
                 alert('حدث خطأ في تحميل الشهادة');
             }
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html'; // توجيه إلى الصفحة الرئيسية
         }
     </script>
 </body>
