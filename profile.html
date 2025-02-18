@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الملف الشخصي - اليوم العلمي</title>
+    <title>تسجيل الدخول - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #2B579A;
             --secondary-color: #4A90E2;
             --text-color: #333;
-            --background-color: #F8F9FA;
+            --background-color: #F5F7FA;
         }
 
         * {
@@ -24,130 +23,126 @@
         body {
             background-color: var(--background-color);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background: white;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
 
         .logo-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            max-width: 1200px;
+            gap: 20px;
+            max-width: 800px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         .logo {
-            height: 50px;
+            height: 60px;
+            object-fit: contain;
         }
 
         .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .welcome-card {
-            background: var(--primary-color);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .profile-card {
+        .login-card {
             background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
         }
 
-        .info-title {
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .info-item i {
+        .title {
             color: var(--primary-color);
-            width: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
         }
 
-        .info-item label {
-            color: #666;
-            min-width: 100px;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
         }
 
-        button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(43, 87, 154, 0.1);
         }
 
-        #attendanceBtn {
+        button {
+            width: 100%;
+            padding: 12px;
             background: var(--primary-color);
             color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        #certificateBtn {
-            background: #6c757d;
-            color: white;
+        button:hover {
+            background: var(--secondary-color);
+        }
+
+        button:disabled {
+            background: #95acd4;
+            cursor: wait;
         }
 
         .error-message {
             color: #dc3545;
             text-align: center;
-            padding: 1rem;
-            margin-top: 1rem;
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fff5f5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .info-grid {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 15px;
             }
-            
-            .buttons {
-                flex-direction: column;
+
+            .login-card {
+                padding: 20px;
             }
-            
-            button {
-                width: 100%;
+
+            .logo {
+                height: 40px;
             }
         }
     </style>
@@ -161,165 +156,66 @@
     </header>
 
     <div class="container">
-        <div class="welcome-card">
-            <h2>حياك الله في اليوم العلمي</h2>
-            <p id="welcomeName"></p>
-        </div>
-
-        <div class="profile-card">
-            <h3 class="info-title">
-                <i class="fas fa-user-circle"></i>
-                معلومات المستخدم
-            </h3>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <i class="fas fa-user"></i>
-                    <label>الاسم:</label>
-                    <span id="userName">-</span>
+        <div class="login-card">
+            <h1 class="title">تسجيل الدخول لليوم العلمي</h1>
+            <form id="loginForm" onsubmit="return login(event)">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <label>البريد الإلكتروني:</label>
-                    <span id="userEmail">-</span>
+                <div class="form-group">
+                    <label for="phone">رقم الجوال:</label>
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-phone"></i>
-                    <label>رقم الجوال:</label>
-                    <span id="userPhone">-</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-venus-mars"></i>
-                    <label>الجنس:</label>
-                    <span id="userGender">-</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-user-graduate"></i>
-                    <label>نوع المشاركة:</label>
-                    <span id="userType">-</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-globe"></i>
-                    <label>الدولة:</label>
-                    <span id="userCountry">-</span>
-                </div>
-            </div>
-
-            <div class="buttons">
-                <button id="attendanceBtn" onclick="markAttendance()">
-                    <i class="fas fa-check-circle"></i>
-                    تسجيل الحضور
-                </button>
-                <button id="certificateBtn" onclick="downloadCertificate()" disabled>
-                    <i class="fas fa-certificate"></i>
-                    تحميل الشهادة
-                </button>
-                <button onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                    تسجيل الخروج
-                </button>
-            </div>
+                <button type="submit" id="submitBtn">تسجيل الدخول</button>
+            </form>
+            <div id="errorMessage" class="error-message"></div>
         </div>
     </div>
 
     <script>
-        // التحقق من تسجيل الدخول عند تحميل الصفحة
-        window.onload = function() {
-            if (!localStorage.getItem('userEmail')) {
-                window.location.href = 'login.html';
-                return;
-            }
-            loadUserData();
-        };
-
-        // تحميل بيانات المستخدم
-        function loadUserData() {
-            document.getElementById('welcomeName').textContent = `مرحباً، ${localStorage.getItem('userName')}`;
-            document.getElementById('userName').textContent = localStorage.getItem('userName');
-            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail');
-            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone');
-            document.getElementById('userGender').textContent = localStorage.getItem('userGender');
-            document.getElementById('userType').textContent = localStorage.getItem('userType');
-            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry');
-
-            const attendanceStatus = localStorage.getItem('attendanceStatus');
-            const attendanceBtn = document.getElementById('attendanceBtn');
-            const certificateBtn = document.getElementById('certificateBtn');
-
-            if (attendanceStatus === 'true') {
-                attendanceBtn.disabled = true;
-                attendanceBtn.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                certificateBtn.disabled = false;
-            }
-        }
-
-        // تسجيل الحضور
-        async function markAttendance() {
-            const attendanceBtn = document.getElementById('attendanceBtn');
-            const certificateBtn = document.getElementById('certificateBtn');
+        async function login(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            const submitBtn = document.getElementById('submitBtn');
             
             try {
-                attendanceBtn.disabled = true;
-                attendanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
-
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'جاري التحميل...';
+                
                 const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', localStorage.getItem('userEmail'));
-                url.searchParams.append('phone', localStorage.getItem('userPhone'));
+                url.searchParams.append('action', 'verifyUser');
+                url.searchParams.append('email', email);
+                url.searchParams.append('phone', phone);
 
                 const response = await fetch(url);
                 const data = await response.json();
 
                 if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
-                    attendanceBtn.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                    certificateBtn.disabled = false;
-                    alert('تم تسجيل حضورك بنجاح');
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userPhone', phone);
+                    localStorage.setItem('userName', data.data.name);
+                    localStorage.setItem('userGender', data.data.gender);
+                    localStorage.setItem('userType', data.data.type);
+                    localStorage.setItem('userCountry', data.data.country);
+                    localStorage.setItem('attendanceStatus', data.data.attendanceStatus);
+                    
+                    window.location.href = 'profile.html';
                 } else {
-                    throw new Error(data.message || 'حدث خطأ في تسجيل الحضور');
+                    throw new Error(data.message || 'البيانات غير صحيحة');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert(error.message || 'حدث خطأ في تسجيل الحضور');
-                attendanceBtn.disabled = false;
-                attendanceBtn.innerHTML = '<i class="fas fa-check-circle"></i> تسجيل الحضور';
-            }
-        }
-
-        // تحميل الشهادة
-        async function downloadCertificate() {
-            const certificateBtn = document.getElementById('certificateBtn');
-            
-            try {
-                certificateBtn.disabled = true;
-                certificateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
-
-                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-                url.searchParams.append('action', 'getCertificate');
-                url.searchParams.append('email', localStorage.getItem('userEmail'));
-                url.searchParams.append('phone', localStorage.getItem('userPhone'));
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success && data.certificateUrl) {
-                    window.open(data.certificateUrl, '_blank');
-                } else {
-                    throw new Error(data.message || 'لم يتم العثور على الشهادة');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message || 'حدث خطأ في تحميل الشهادة');
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
             } finally {
-                certificateBtn.disabled = false;
-                certificateBtn.innerHTML = '<i class="fas fa-certificate"></i> تحميل الشهادة';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'تسجيل الدخول';
             }
-        }
-
-        // تسجيل الخروج
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+            
+            return false;
         }
     </script>
 </body>
