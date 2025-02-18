@@ -3,30 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الصفحة الشخصية - اليوم العلمي</title>
+    <title>اليوم العلمي - الصفحة الرئيسية</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .hidden {
-            display: none;
+        body {
+            background-color: #f4f3ee;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .header {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-bottom: 4px solid #ddd;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .motivation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #555;
+            font-weight: bold;
+        }
+        .logo {
+            width: 100px;
+            margin: 10px auto;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            background-color: #198754;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #145c32;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="profile">
-            <h2>مرحبا بك في اليوم العلمي لمجلس السماع والتعليق لكتاب أخصر المختصرات لابن بدران الحنبلي بجامع عائشة الراجحي بمكة المكرمة</h2>
-            <div id="userInfo">
-                <p>الاسم: <span id="userName"></span></p>
-                <p>البريد الإلكتروني: <span id="userEmail"></span></p>
-                <p>رقم الجوال: <span id="userPhone"></span></p>
-                <p>نوع المشاركة: <span id="userType"></span></p>
-                <p>الدولة: <span id="userCountry"></span></p>
-            </div>
-            <button id="attendanceBtn">تسجيل الحضور</button>
-            <button id="certificateBtn" class="hidden">تحميل الشهادة</button>
-            <button id="logoutBtn">تسجيل خروج</button>
-        </div>
+    <div class="header">
+        اليوم العلمي - مجلس سماع كتاب أخصر المختصرات
     </div>
-    <script src="profile.js"></script>
+    <div class="container">
+        <img src="شعار الجامع.png" class="logo" alt="شعار الجامع">
+        <img src="شعار جمعية اثر الجديد بدون خلفية.png" class="logo" alt="شعار الجمعية">
+        <div class="motivation">
+            مرحبًا بطالب العلم 🌺
+            <br>
+            "العلم نور، ومن سار على الدرب وصل، نرحب بكم في هذا المجلس المبارك"
+        </div>
+        <button class="btn" onclick="location.href='login.html'">تسجيل الدخول</button>
+        <button class="btn" onclick="location.href='profile.html'">الصفحة الشخصية</button>
+    </div>
 </body>
-</html> 
+</html>
