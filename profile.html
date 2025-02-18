@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البيانات الشخصية - اليوم العلمي</title>
+    <title>الملف الشخصي - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <!-- إضافة مكتبة Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #005C97;
@@ -14,8 +12,6 @@
             --accent-color: #00BCD4;
             --text-color: #2C3E50;
             --background-color: #F5F7FA;
-            --success-color: #28a745;
-            --error-color: #dc3545;
         }
 
         * {
@@ -28,184 +24,111 @@
             background-color: var(--background-color);
             font-family: 'Tajawal', sans-serif;
             color: var(--text-color);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
             min-height: 100vh;
-        }
-
-        .header {
-            background: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .logo-container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            height: 60px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
+            padding: 20px;
         }
 
         .container {
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .profile-card {
             background: white;
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            animation: fadeIn 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
-        .profile-header {
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            border-radius: 0 15px 15px 0;
+        }
+
+        .profile-card h2 {
+            color: var(--primary-color);
             text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .user-info {
             margin-bottom: 30px;
         }
 
-        .profile-header h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .welcome-banner {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            text-align: center;
-            animation: slideDown 0.5s ease;
-        }
-
-        .info-group {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: rgba(0,92,151,0.03);
-            border-radius: 10px;
-            border: 1px solid rgba(0,92,151,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .info-group:hover {
-            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
-            transform: translateY(-2px);
-        }
-
-        .info-item {
+        .user-info p {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .info-item i {
-            color: var(--primary-color);
-            margin-left: 10px;
-        }
-
-        .button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
             align-items: center;
-            gap: 8px;
         }
 
-        .button:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .user-info p strong {
+            color: var(--primary-color);
         }
 
-        .button:disabled {
+        button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            margin: 10px 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        }
+
+        button:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        .button i {
-            font-size: 18px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
+        #logout {
+            background: #dc3545;
             margin-top: 20px;
-            flex-wrap: wrap;
         }
 
-        .logout-btn {
-            background: var(--error-color);
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-present {
+            background: #28a745;
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s ease;
         }
 
-        .logout-btn:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .attendance-status {
-            text-align: center;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 8px;
-            background: #e8f5e9;
-            color: var(--success-color);
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from { 
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .status-absent {
+            background: #dc3545;
+            color: white;
         }
 
         @media (max-width: 768px) {
@@ -217,212 +140,142 @@
                 padding: 20px;
             }
 
-            .logo {
-                height: 40px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .button {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .logout-btn {
-                position: static;
-                margin: 10px auto;
-                width: fit-content;
-            }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { 
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
+            button {
+                padding: 10px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <button class="logout-btn" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i>
-            تسجيل الخروج
-        </button>
-        <div class="logo-container">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
-        </div>
-    </header>
-
     <div class="container">
         <div class="profile-card">
-            <div class="welcome-banner">
-                <h2><i class="fas fa-user-circle"></i> حياك الله، <span id="welcomeName">-</span></h2>
-                <p>سعدنا بوجودك معنا في اليوم العلمي</p>
+            <h2>بيانات المشارك</h2>
+            <div class="user-info">
+                <p><strong>الاسم:</strong> <span id="userName">-</span></p>
+                <p><strong>البريد الإلكتروني:</strong> <span id="userEmail">-</span></p>
+                <p><strong>رقم الجوال:</strong> <span id="userPhone">-</span></p>
+                <p><strong>الجنس:</strong> <span id="userGender">-</span></p>
+                <p><strong>نوع المشاركة:</strong> <span id="userType">-</span></p>
+                <p><strong>الدولة:</strong> <span id="userCountry">-</span></p>
+                <p><strong>حالة الحضور:</strong> <span id="attendanceStatus" class="status-badge">-</span></p>
             </div>
-
-            <div class="info-group">
-                <h3><i class="fas fa-info-circle"></i> معلومات المستخدم</h3>
-                <div class="info-item">
-                    <span><i class="fas fa-user"></i> الاسم:</span>
-                    <span id="userName">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-envelope"></i> البريد الإلكتروني:</span>
-                    <span id="userEmail">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-phone"></i> رقم الجوال:</span>
-                    <span id="userPhone">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-venus-mars"></i> الجنس:</span>
-                    <span id="userGender">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-user-tag"></i> نوع المشاركة:</span>
-                    <span id="userType">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-globe"></i> الدولة:</span>
-                    <span id="userCountry">-</span>
-                </div>
+            
+            <div id="attendanceActions">
+                <button id="markAttendance" style="display: none;">تسجيل الحضور</button>
+                <button id="downloadCertificate" style="display: none;">تحميل الشهادة</button>
             </div>
-
-            <div id="attendanceStatus" class="attendance-status">
-                <i class="fas fa-check-circle"></i> تم تسجيل حضورك بنجاح!
-            </div>
-
-            <div class="button-group">
-                <button id="attendanceBtn" class="button" onclick="markAttendance()">
-                    <i class="fas fa-clipboard-check"></i>
-                    تسجيل الحضور
-                </button>
-                <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>
-                    <i class="fas fa-certificate"></i>
-                    تحميل الشهادة
-                </button>
-            </div>
+            
+            <button id="logout">تسجيل الخروج</button>
         </div>
     </div>
 
-    <div id="toast" class="toast"></div>
-
     <script>
-        window.onload = function() {
-            if (!localStorage.getItem('userEmail')) {
-                window.location.href = 'index.html';
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق من وجود بيانات المستخدم
+            const userData = {
+                name: localStorage.getItem('userName'),
+                email: localStorage.getItem('userEmail'),
+                phone: localStorage.getItem('userPhone'),
+                gender: localStorage.getItem('userGender'),
+                type: localStorage.getItem('userType'),
+                country: localStorage.getItem('userCountry'),
+                attendanceStatus: localStorage.getItem('attendanceStatus') === 'true'
+            };
+
+            // إذا لم تكن هناك بيانات، نعيد التوجيه إلى صفحة تسجيل الدخول
+            if (!userData.email || !userData.phone) {
+                window.location.replace('./login.html');
                 return;
             }
-            loadUserData();
-        };
 
-        function loadUserData() {
-            document.getElementById('welcomeName').textContent = localStorage.getItem('userName')?.split(' ')[0] || 'زائرنا الكريم';
-            document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
-
-            const attendanceStatus = localStorage.getItem('attendanceStatus');
-            if (attendanceStatus === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                document.getElementById('certificateBtn').disabled = false;
-                document.getElementById('attendanceStatus').style.display = 'block';
+            // عرض بيانات المستخدم
+            document.getElementById('userName').textContent = userData.name || '-';
+            document.getElementById('userEmail').textContent = userData.email || '-';
+            document.getElementById('userPhone').textContent = userData.phone || '-';
+            document.getElementById('userGender').textContent = userData.gender || '-';
+            document.getElementById('userType').textContent = userData.type || '-';
+            document.getElementById('userCountry').textContent = userData.country || '-';
+            
+            // تحديث حالة الحضور مع التنسيق
+            const attendanceStatusElement = document.getElementById('attendanceStatus');
+            if (userData.attendanceStatus) {
+                attendanceStatusElement.textContent = 'حاضر';
+                attendanceStatusElement.classList.add('status-present');
+            } else {
+                attendanceStatusElement.textContent = 'غير مسجل';
+                attendanceStatusElement.classList.add('status-absent');
             }
-        }
 
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.background = isSuccess ? '#e8f5e9' : '#ffebee';
-            toast.style.color = isSuccess ? '#2e7d32' : '#c62828';
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
+            // إدارة أزرار الحضور والشهادة
+            const markAttendanceBtn = document.getElementById('markAttendance');
+            const downloadCertificateBtn = document.getElementById('downloadCertificate');
 
-        async function markAttendance() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
+            if (!userData.attendanceStatus) {
+                markAttendanceBtn.style.display = 'block';
+            } else {
+                downloadCertificateBtn.style.display = 'block';
+            }
 
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+            // معالجة تسجيل الحضور
+            markAttendanceBtn.addEventListener('click', async function() {
+                try {
+                    markAttendanceBtn.disabled = true;
+                    markAttendanceBtn.textContent = 'جاري تسجيل الحضور...';
 
-                const response = await fetch(url);
-                const data = await response.json();
+                    const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                    url.searchParams.append('action', 'markAttendance');
+                    url.searchParams.append('email', userData.email);
+                    url.searchParams.append('phone', userData.phone);
 
-                if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-                    document.getElementById('certificateBtn').disabled = false;
-                    document.getElementById('attendanceStatus').style.display = 'block';
-                    showToast('تم تسجيل حضورك بنجاح!', true);
-                } else {
-                    showToast(data.message || 'حدث خطأ في تسجيل الحضور', false);
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        localStorage.setItem('attendanceStatus', 'true');
+                        window.location.reload();
+                    } else {
+                        throw new Error(data.message || 'فشل تسجيل الحضور');
+                    }
+                } catch (error) {
+                    alert(error.message || 'حدث خطأ أثناء تسجيل الحضور');
+                    markAttendanceBtn.disabled = false;
+                    markAttendanceBtn.textContent = 'تسجيل الحضور';
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('حدث خطأ في تسجيل الحضور', false);
-            }
-        }
+            });
 
-        async function downloadCertificate() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
+            // معالجة تحميل الشهادة
+            downloadCertificateBtn.addEventListener('click', async function() {
+                try {
+                    downloadCertificateBtn.disabled = true;
+                    downloadCertificateBtn.textContent = 'جاري تحميل الشهادة...';
 
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
-                url.searchParams.append('action', 'getCertificate');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+                    const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                    url.searchParams.append('action', 'getCertificate');
+                    url.searchParams.append('email', userData.email);
+                    url.searchParams.append('phone', userData.phone);
 
-                const response = await fetch(url);
-                const data = await response.json();
+                    const response = await fetch(url);
+                    const data = await response.json();
 
-                if (data.success) {
-                    window.open(data.certificateUrl, '_blank');
-                    showToast('جاري تحميل الشهادة...', true);
-                } else {
-                    showToast(data.message || 'لم يتم العثور على الشهادة', false);
+                    if (data.success && data.certificateUrl) {
+                        window.open(data.certificateUrl, '_blank');
+                    } else {
+                        throw new Error(data.message || 'الشهادة غير متوفرة حالياً');
+                    }
+                } catch (error) {
+                    alert(error.message || 'حدث خطأ أثناء تحميل الشهادة');
+                } finally {
+                    downloadCertificateBtn.disabled = false;
+                    downloadCertificateBtn.textContent = 'تحميل الشهادة';
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('حدث خطأ في تحميل الشهادة', false);
-            }
-        }
+            });
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
+            // معالجة تسجيل الخروج
+            document.getElementById('logout').addEventListener('click', function() {
+                localStorage.clear();
+                window.location.replace('./login.html');
+            });
+        });
     </script>
 </body>
 </html>
