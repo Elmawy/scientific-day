@@ -9,10 +9,12 @@ async function downloadCertificate() {
         url.searchParams.append('phone', phone);
 
         const response = await fetch(url, { method: 'GET' });
-        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة بدون JSON
+        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة
+
+        console.log("رابط الشهادة:", certificateUrl); // ✅ تأكيد أن الرابط يتم استرجاعه
 
         if (certificateUrl.startsWith("http")) {
-            window.location.href = certificateUrl; // ✅ فتح رابط الشهادة مباشرة
+            window.location.href = certificateUrl; // ✅ يفتح رابط الشهادة مباشرة
         } else {
             alert(certificateUrl); // عرض أي رسالة خطأ إذا لم يتم العثور على الشهادة
         }
@@ -21,3 +23,11 @@ async function downloadCertificate() {
         alert('حدث خطأ في تحميل الشهادة');
     }
 }
+
+// تأكد من أن الزر يستدعي `downloadCertificate` عند النقر عليه
+document.addEventListener("DOMContentLoaded", function () {
+    const certificateBtn = document.getElementById("certificateBtn");
+    if (certificateBtn) {
+        certificateBtn.addEventListener("click", downloadCertificate);
+    }
+});
