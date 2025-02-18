@@ -241,6 +241,8 @@
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             
+            console.log('بيانات النموذج:', { attendanceCode, email, phone });
+            
             try {
                 if (!attendanceCode && (!email || !phone)) {
                     throw new Error('يرجى إدخال جميع البيانات المطلوبة');
@@ -256,11 +258,21 @@
                     url.searchParams.append('phone', phone);
                 }
 
+                console.log('إرسال طلب إلى:', url.toString());
+
                 const response = await fetch(url);
+                console.log('استجابة الخادم:', response.status);
+                
                 const data = await response.json();
+                console.log('بيانات الاستجابة:', data);
 
                 if (data && data.success && data.data) {
-                    // تخزين بيانات المستخدم
+                    console.log('تم التحقق من المستخدم بنجاح');
+                    
+                    // مسح البيانات القديمة
+                    localStorage.clear();
+                    
+                    // تخزين البيانات الجديدة
                     localStorage.setItem('userEmail', data.data.email || '');
                     localStorage.setItem('userPhone', data.data.phone || '');
                     localStorage.setItem('userName', data.data.name || '');
@@ -269,11 +281,15 @@
                     localStorage.setItem('userCountry', data.data.country || '');
                     localStorage.setItem('attendanceStatus', data.data.attendanceStatus ? 'true' : 'false');
                     
-                    window.location.replace('./profile.html');
+                    console.log('تم تخزين البيانات في localStorage');
+                    console.log('جاري التوجيه إلى صفحة الملف الشخصي...');
+                    
+                    window.location.href = 'profile.html';
                 } else {
                     throw new Error(data.message || 'لم يتم العثور على المستخدم');
                 }
             } catch (error) {
+                console.error('خطأ:', error);
                 alert(error.message || 'حدث خطأ أثناء تسجيل الدخول');
             } finally {
                 form.classList.remove('loading');
