@@ -3,13 +3,13 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec');
+        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'); // استبدل بـ Script ID الصحيح
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
 
         const response = await fetch(url, { method: 'GET' });
-        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة
+        const certificateUrl = await response.text(); // ✅ استرجاع الرابط مباشرة بدون JSON
 
         if (certificateUrl.startsWith("http")) {
             window.location.href = certificateUrl; // ✅ فتح رابط الشهادة مباشرة
