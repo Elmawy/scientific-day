@@ -11,7 +11,7 @@ window.onload = function() {
 function loadUserData() {
     document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
     document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-    document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
+    document.getElementById('COLUMNS.PHONE').textContent = localStorage.getItem('COLUMNS.PHONE') || '-';
     document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
     document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
     document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
