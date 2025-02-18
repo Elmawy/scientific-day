@@ -176,44 +176,31 @@
                     <i class="fas fa-info-circle"></i>
                     معلومات المستخدم
                 </h3>
-
-                <div class="info-grid">
-                    <div class="info-label">
-                        <i class="fas fa-user"></i>
-                        الاسم:
-                    </div>
-                    <div class="info-value" id="userName">وئام عبد النور أوملي</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-envelope"></i>
-                        البريد الإلكتروني:
-                    </div>
-                    <div class="info-value" id="userEmail">oumelii.ouiam@gmail.com</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-phone"></i>
-                        رقم الجوال:
-                    </div>
-                    <div class="info-value" id="userPhone">0506146629</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-venus-mars"></i>
-                        الجنس:
-                    </div>
-                    <div class="info-value" id="userGender">أنثى</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-video"></i>
-                        نوع المشاركة:
-                    </div>
-                    <div class="info-value" id="participationType">عن بعد (البث المباشر)</div>
-
-                    <div class="info-label">
-                        <i class="fas fa-globe"></i>
-                        الدولة:
-                    </div>
-                    <div class="info-value" id="userCountry">السعودية مكة</div>
+  <div class="info-item">
+                    <span>الاسم:</span>
+                    <span id="userName">-</span>
                 </div>
+                <div class="info-item">
+                    <span>البريد الإلكتروني:</span>
+                    <span id="userEmail">-</span>
+                </div>
+                <div class="info-item">
+                    <span>رقم الجوال:</span>
+                    <span id="userPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <span>الجنس:</span>
+                    <span id="userGender">-</span>
+                </div>
+                <div class="info-item">
+                    <span>نوع المشاركة:</span>
+                    <span id="userType">-</span>
+                </div>
+                <div class="info-item">
+                    <span>الدولة:</span>
+                    <span id="userCountry">-</span>
+                </div>
+            </div>
 
                 <div class="actions">
                     <button class="action-button attendance-button" id="attendanceButton" onclick="markAttendance()">
@@ -255,12 +242,12 @@
         };
 
         function displayUserData() {
-            document.getElementById('userName').textContent = userData.name;
-            document.getElementById('userEmail').textContent = userData.email;
-            document.getElementById('userPhone').textContent = userData.phone;
-            document.getElementById('userGender').textContent = userData.gender || 'أنثى';
-            document.getElementById('participationType').textContent = userData.type || 'عن بعد (البث المباشر)';
-            document.getElementById('userCountry').textContent = userData.country || 'السعودية مكة';
+              document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
+            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
+            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
+            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
+            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
+            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
             
             // تحديث اسم الترحيب
             const firstName = userData.name.split(' ')[0];
