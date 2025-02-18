@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اليوم العلمي - مجلس سماع كتاب أخصر المختصرات</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #005C97;
@@ -14,11 +15,15 @@
             --background-color: #F5F7FA;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: var(--background-color);
             font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
             color: var(--text-color);
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
         }
@@ -30,6 +35,7 @@
             padding: 40px 20px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .header::before {
@@ -94,34 +100,34 @@
         }
 
         .detail-item {
-            padding: 20px;
+            padding: 25px;
             background: rgba(0, 92, 151, 0.03);
             border-radius: 10px;
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 92, 151, 0.05);
         }
 
         .detail-item i {
-            font-size: 2rem;
-            color: var(--accent-color);
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .detail-item h3 {
+            color: var(--primary-color);
             margin-bottom: 10px;
+            font-size: 1.4rem;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        .detail-item p {
+            line-height: 1.8;
+            margin: 10px 0;
+            font-size: 1.1rem;
         }
 
         .logos {
@@ -142,17 +148,40 @@
             transform: scale(1.05);
         }
 
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
             }
-            
+
             .content-box {
                 padding: 20px;
             }
 
             .motivation {
                 font-size: 1.4rem;
+            }
+
+            .logos {
+                flex-direction: column;
             }
         }
     </style>
@@ -164,8 +193,8 @@
 
     <div class="container">
         <div class="logos">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+            <img src="https://placehold.co/150x150" alt="شعار الجامع" class="logo">
+            <img src="https://placehold.co/150x150" alt="شعار الجمعية" class="logo">
         </div>
 
         <div class="content-box">
@@ -187,9 +216,13 @@
                     <p>الأحد ٢٤ شعبان بعد صلاة العصر</p>
                 </div>
                 <div class="detail-item">
-                    <i class="fas fa-key"></i>
-                    <h3>رمز الحضور</h3>
-                    <p>1851</p>
+                    <i class="fas fa-handshake"></i>
+                    <h3>بتنظيم</h3>
+                    <p>جمعية الدعوة بالعزيزية والعوالي
+                    <br>
+                    بالتعاون مع
+                    <br>
+                    جامع عائشة الراجحي</p>
                 </div>
             </div>
 
