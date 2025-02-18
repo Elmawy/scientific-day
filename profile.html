@@ -27,27 +27,6 @@
             min-height: 100vh;
         }
 
-        .header {
-            background: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            height: 60px;
-            object-fit: contain;
-        }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -62,39 +41,6 @@
             margin-bottom: 20px;
         }
 
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-header h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .info-group {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0,92,151,0.03);
-            border-radius: 8px;
-        }
-
-        .info-group h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
         .button {
             background: var(--primary-color);
             color: white;
@@ -105,10 +51,6 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s ease;
-        }
-
-        .button:hover {
-            background: var(--secondary-color);
         }
 
         .button:disabled {
@@ -122,119 +64,26 @@
             justify-content: center;
             margin-top: 20px;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .profile-card {
-                padding: 20px;
-            }
-
-            .logo {
-                height: 40px;
-            }
-        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo-container">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
-        </div>
-    </header>
-
     <div class="container">
         <div class="profile-card">
-            <div class="profile-header">
-                <h1>البيانات الشخصية</h1>
-                <p>مرحباً بك في صفحتك الشخصية</p>
-            </div>
-
-            <div class="info-group">
-                <h3>معلومات المستخدم</h3>
-                <div class="info-item">
-                    <span>الاسم:</span>
-                    <span id="userName">-</span>
-                </div>
-                <div class="info-item">
-                    <span>البريد الإلكتروني:</span>
-                    <span id="userEmail">-</span>
-                </div>
-                <div class="info-item">
-                    <span>رقم الجوال:</span>
-                    <span id="userPhone">-</span>
-                </div>
-                <div class="info-item">
-                    <span>الجنس:</span>
-                    <span id="userGender">-</span>
-                </div>
-                <div class="info-item">
-                    <span>نوع المشاركة:</span>
-                    <span id="userType">-</span>
-                </div>
-                <div class="info-item">
-                    <span>الدولة:</span>
-                    <span id="userCountry">-</span>
-                </div>
+            <h1>البيانات الشخصية</h1>
+            <div>
+                <p>الاسم: <span id="userName">-</span></p>
+                <p>البريد الإلكتروني: <span id="userEmail">-</span></p>
+                <p>رقم الجوال: <span id="userPhone">-</span></p>
             </div>
 
             <div class="button-group">
                 <button id="attendanceBtn" class="button" onclick="markAttendance()">تسجيل الحضور</button>
                 <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>تحميل الشهادة</button>
-                <button id="logoutBtn" class="button" onclick="logout()">تسجيل الخروج</button> <!-- زر تسجيل الخروج -->
+                <button id="logoutBtn" class="button" onclick="logout()">تسجيل الخروج</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // التحقق من تسجيل الدخول
-        window.onload = function() {
-            if (!localStorage.getItem('userEmail')) {
-                window.location.href = 'login.html';
-                return;
-            }
-            loadUserData();
-        };
-
-        // تحميل بيانات المستخدم
-        function loadUserData() {
-            document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-            document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-            document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-            document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-            document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-            document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
-
-            const attendanceStatus = localStorage.getItem('attendanceStatus');
-            if (attendanceStatus === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-                document.getElementById('certificateBtn').disabled = false;
-            }
-        }
-
-        // تسجيل الحضور
-        function markAttendance() {
-            localStorage.setItem('attendanceStatus', 'true');
-            document.getElementById('attendanceBtn').disabled = true;
-            document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
-            document.getElementById('certificateBtn').disabled = false;
-            alert('تم تسجيل حضورك بنجاح');
-        }
-
-        // تحميل الشهادة
-        function downloadCertificate() {
-            alert('سيتم تحميل الشهادة قريبًا!');
-        }
-
-        // تسجيل الخروج والعودة إلى الصفحة الرئيسية
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html'; // إعادة التوجيه إلى الصفحة الرئيسية
-        }
-    </script>
+    <script src="profile.js"></script>
 </body>
 </html>
