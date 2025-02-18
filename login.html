@@ -54,10 +54,6 @@
             transition: transform 0.3s ease;
         }
 
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
         .login-form {
             background: white;
             border-radius: 15px;
@@ -85,6 +81,28 @@
             text-align: center;
             margin-bottom: 30px;
             font-size: 1.8rem;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .login-option {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-option.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
         .form-group {
@@ -136,29 +154,12 @@
             pointer-events: none;
         }
 
-        .loading button {
-            position: relative;
-            color: transparent !important;
-        }
-
-        .loading button:after {
-            content: "...جاري التحميل";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-family: 'Tajawal', sans-serif;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
-                margin: 0;
             }
 
             .login-form {
-                border-radius: 10px;
                 padding: 20px;
                 margin: 10px;
             }
@@ -166,78 +167,118 @@
             .logo {
                 max-width: 120px;
             }
-
-            .login-form h2 {
-                font-size: 1.5rem;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logos">
-            <img src="./شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="./شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
+            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
         </div>
 
         <div class="login-form">
             <h2>تسجيل الدخول لليوم العلمي</h2>
+            
+            <div class="login-options">
+                <div class="login-option active" onclick="switchLoginMethod('code')">الدخول برمز الحضور</div>
+                <div class="login-option" onclick="switchLoginMethod('credentials')">الدخول بالبيانات</div>
+            </div>
+
             <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">البريد الإلكتروني:</label>
-                    <input type="email" id="email" required>
+                <div id="codeLogin">
+                    <div class="form-group">
+                        <label for="attendanceCode">رمز الحضور:</label>
+                        <input type="text" id="attendanceCode" placeholder="أدخل رمز الحضور">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="phone">رقم الجوال:</label>
-                    <input type="tel" id="phone" required>
+
+                <div id="credentialsLogin" style="display: none;">
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني:</label>
+                        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الجوال:</label>
+                        <input type="tel" id="phone" placeholder="أدخل رقم الجوال">
+                    </div>
                 </div>
+
                 <button type="submit">دخول</button>
             </form>
         </div>
     </div>
 
     <script>
+        function switchLoginMethod(method) {
+            const codeLogin = document.getElementById('codeLogin');
+            const credentialsLogin = document.getElementById('credentialsLogin');
+            const options = document.querySelectorAll('.login-option');
+            
+            options.forEach(option => option.classList.remove('active'));
+            
+            if (method === 'code') {
+                codeLogin.style.display = 'block';
+                credentialsLogin.style.display = 'none';
+                options[0].classList.add('active');
+                // تفريغ حقول البيانات
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+            } else {
+                codeLogin.style.display = 'none';
+                credentialsLogin.style.display = 'block';
+                options[1].classList.add('active');
+                // تفريغ حقل الرمز
+                document.getElementById('attendanceCode').value = '';
+            }
+        }
+
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-          
+            
             const form = this;
             form.classList.add('loading');
-          
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-          
+            
+            const attendanceCode = document.getElementById('attendanceCode').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
             try {
                 console.log('Attempting login...');
                 const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
                 url.searchParams.append('action', 'verifyUser');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+                
+                if (attendanceCode) {
+                    url.searchParams.append('attendanceCode', attendanceCode);
+                } else if (email && phone) {
+                    url.searchParams.append('email', email);
+                    url.searchParams.append('phone', phone);
+                } else {
+                    throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
+                }
 
-                const response = await fetch(url, {
-                    method: 'GET'
-                });
-
+                const response = await fetch(url);
                 const data = await response.json();
                 console.log('Server response:', data);
 
                 if (data && data.success) {
                     console.log('Login successful, storing data...');
-                    localStorage.setItem('userEmail', email);
-                    localStorage.setItem('userPhone', phone);
-                    localStorage.setItem('userName', data.name);
-                    localStorage.setItem('userGender', data.gender);
-                    localStorage.setItem('userType', data.type);
-                    localStorage.setItem('userCountry', data.country);
-                    localStorage.setItem('attendanceStatus', data.attendanceStatus || 'false');
-                  
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('userPhone', data.data.phone);
+                    localStorage.setItem('userName', data.data.name);
+                    localStorage.setItem('userGender', data.data.gender);
+                    localStorage.setItem('userType', data.data.type);
+                    localStorage.setItem('userCountry', data.data.country);
+                    localStorage.setItem('attendanceStatus', data.data.attendanceStatus || 'false');
+                    
                     console.log('Data stored, redirecting...');
                     window.location.replace('./profile.html');
                 } else {
-                    alert(data.message || 'البيانات غير صحيحة. الرجاء التحقق من البريد الإلكتروني ورقم الجوال');
+                    throw new Error(data.message || 'لم يتم العثور على المستخدم');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('حدث خطأ في تسجيل الدخول. الرجاء المحاولة مرة أخرى');
+                alert(error.message);
             } finally {
                 form.classList.remove('loading');
             }
