@@ -29,7 +29,7 @@ async function markAttendance() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbzbbaeUOVFqELbDs9oyIlg2V_Si1qxaSuCaWJlZ18j471_le-Y-Ci6DutDQI_8kYaWB/exec');
         url.searchParams.append('action', 'markAttendance');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
@@ -57,7 +57,7 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbzbbaeUOVFqELbDs9oyIlg2V_Si1qxaSuCaWJlZ18j471_le-Y-Ci6DutDQI_8kYaWB/exec');
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
