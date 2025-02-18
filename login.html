@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #005C97;
@@ -179,7 +178,7 @@
 
         <div class="login-form">
             <h2>تسجيل الدخول لليوم العلمي</h2>
-            
+
             <div class="login-options">
                 <div class="login-option active" onclick="switchLoginMethod('code')">الدخول برمز الحضور</div>
                 <div class="login-option" onclick="switchLoginMethod('credentials')">الدخول بالبيانات</div>
@@ -214,9 +213,9 @@
             const codeLogin = document.getElementById('codeLogin');
             const credentialsLogin = document.getElementById('credentialsLogin');
             const options = document.querySelectorAll('.login-option');
-            
+
             options.forEach(option => option.classList.remove('active'));
-            
+
             if (method === 'code') {
                 codeLogin.style.display = 'block';
                 credentialsLogin.style.display = 'none';
@@ -233,24 +232,24 @@
 
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const form = this;
             form.classList.add('loading');
-            
+
             const attendanceCode = document.getElementById('attendanceCode').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            
+
             console.log('بيانات النموذج:', { attendanceCode, email, phone });
-            
+
             try {
                 if (!attendanceCode && (!email || !phone)) {
                     throw new Error('يرجى إدخال جميع البيانات المطلوبة');
                 }
 
-                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
                 url.searchParams.append('action', 'verifyUser');
-                
+
                 if (attendanceCode) {
                     url.searchParams.append('attendanceCode', attendanceCode);
                 } else {
@@ -262,16 +261,16 @@
 
                 const response = await fetch(url);
                 console.log('استجابة الخادم:', response.status);
-                
+
                 const data = await response.json();
                 console.log('بيانات الاستجابة:', data);
 
                 if (data && data.success && data.data) {
                     console.log('تم التحقق من المستخدم بنجاح');
-                    
+
                     // مسح البيانات القديمة
                     localStorage.clear();
-                    
+
                     // تخزين البيانات الجديدة
                     localStorage.setItem('userEmail', data.data.email || '');
                     localStorage.setItem('userPhone', data.data.phone || '');
@@ -280,10 +279,10 @@
                     localStorage.setItem('userType', data.data.type || '');
                     localStorage.setItem('userCountry', data.data.country || '');
                     localStorage.setItem('attendanceStatus', data.data.attendanceStatus ? 'true' : 'false');
-                    
+
                     console.log('تم تخزين البيانات في localStorage');
                     console.log('جاري التوجيه إلى صفحة الملف الشخصي...');
-                    
+
                     window.location.href = 'profile.html';
                 } else {
                     throw new Error(data.message || 'لم يتم العثور على المستخدم');
