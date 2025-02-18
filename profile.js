@@ -1,97 +1,50 @@
-// تحميل بيانات المستخدم عند تحميل الصفحة
-window.onload = function() {
-    if (!localStorage.getItem('userEmail')) {
-        window.location.href = 'login.html';
-        return;
-    }
-    loadUserData();
-};
-
-// تحميل بيانات المستخدم
-function loadUserData() {
-    document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-    document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-    document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-    document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-    document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-    document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
-
-    const attendanceStatus = localStorage.getItem('attendanceStatus');
-    const attendanceBtn = document.getElementById('attendanceBtn');
-    const certificateBtn = document.getElementById('certificateBtn');
-
-    if (attendanceStatus === 'true') {
-        attendanceBtn.disabled = true;
-        attendanceBtn.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-        certificateBtn.disabled = false;
-    }
-}
-
-// تسجيل الحضور
-async function markAttendance() {
-    const attendanceBtn = document.getElementById('attendanceBtn');
-    const certificateBtn = document.getElementById('certificateBtn');
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = this;
+    form.classList.add('loading');
+    
+    const attendanceCode = document.getElementById('attendanceCode').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     
     try {
-        attendanceBtn.disabled = true;
-        attendanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
-
+        console.log('Attempting login...');
         const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-        url.searchParams.append('action', 'markAttendance');
-        url.searchParams.append('email', localStorage.getItem('userEmail'));
-        url.searchParams.append('phone', localStorage.getItem('userPhone'));
+        url.searchParams.append('action', 'verifyUser');
+        
+        if (attendanceCode) {
+            url.searchParams.append('attendanceCode', attendanceCode);
+        } else if (email && phone) {
+            url.searchParams.append('email', email);
+            url.searchParams.append('phone', phone);
+        } else {
+            throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
+        }
 
         const response = await fetch(url);
         const data = await response.json();
+        console.log('Server response:', data);
 
-        if (data.success) {
-            localStorage.setItem('attendanceStatus', 'true');
-            attendanceBtn.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
-            certificateBtn.disabled = false;
-            alert('تم تسجيل حضورك بنجاح');
+        if (data && data.success) {
+            console.log('Login successful, storing data...');
+            localStorage.setItem('userEmail', data.data.email);
+            localStorage.setItem('userPhone', data.data.phone);
+            localStorage.setItem('userName', data.data.name);
+            localStorage.setItem('userGender', data.data.gender);
+            localStorage.setItem('userType', data.data.type);
+            localStorage.setItem('userCountry', data.data.country);
+            localStorage.setItem('attendanceStatus', data.data.attendanceStatus || 'false');
+            
+            console.log('Data stored, redirecting...');
+            window.location.replace('./profile.html');
         } else {
-            throw new Error(data.message || 'حدث خطأ في تسجيل الحضور');
+            throw new Error(data.message || 'لم يتم العثور على المستخدم');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert(error.message || 'حدث خطأ في تسجيل الحضور');
-        attendanceBtn.disabled = false;
-        attendanceBtn.innerHTML = '<i class="fas fa-check-circle"></i> تسجيل الحضور';
-    }
-}
-
-// تحميل الشهادة
-async function downloadCertificate() {
-    const certificateBtn = document.getElementById('certificateBtn');
-    
-    try {
-        certificateBtn.disabled = true;
-        certificateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
-
-        const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-        url.searchParams.append('action', 'getCertificate');
-        url.searchParams.append('email', localStorage.getItem('userEmail'));
-        url.searchParams.append('phone', localStorage.getItem('userPhone'));
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.success && data.certificateUrl) {
-            window.open(data.certificateUrl, '_blank');
-        } else {
-            throw new Error(data.message || 'لم يتم العثور على الشهادة');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert(error.message || 'حدث خطأ في تحميل الشهادة');
+        alert(error.message);
     } finally {
-        certificateBtn.disabled = false;
-        certificateBtn.innerHTML = '<i class="fas fa-certificate"></i> تحميل الشهادة';
+        form.classList.remove('loading');
     }
-}
-
-// تسجيل الخروج
-function logout() {
-    localStorage.clear();
-    window.location.href = 'login.html';
-}
+});
