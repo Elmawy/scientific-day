@@ -4,296 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - اليوم العلمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #005C97;
-            --secondary-color: #363795;
-            --accent-color: #00BCD4;
-            --text-color: #2C3E50;
-            --background-color: #F5F7FA;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--background-color);
-            font-family: 'Tajawal', sans-serif;
-            color: var(--text-color);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
-            min-height: 100vh;
+            background-color: #f5f5f5;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin: 20px 0;
+            max-width: 500px;
         }
 
         .logo {
-            max-width: 150px;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .login-form {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-
-        .login-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
-            border-radius: 0 15px 15px 0;
-        }
-
-        .login-form h2 {
-            color: var(--primary-color);
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-        }
-
-        .login-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
             margin-bottom: 20px;
         }
 
-        .login-option {
-            padding: 10px 20px;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .logo img {
+            max-width: 200px;
+            height: auto;
         }
 
-        .login-option.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
         }
 
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 8px;
-            color: var(--text-color);
-            font-weight: bold;
+            margin-bottom: 5px;
+            color: #666;
         }
 
-        .form-group input {
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .login-options {
+            margin-bottom: 20px;
+        }
+
+        .option-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .submit-button {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Tajawal', sans-serif;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-color: #4CAF50;
             color: white;
-            padding: 12px 30px;
             border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s;
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        .submit-button:hover {
+            background-color: #45a049;
         }
 
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
+        .form-section {
+            display: none;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .login-form {
-                padding: 20px;
-                margin: 10px;
-            }
-
-            .logo {
-                max-width: 120px;
-            }
+        .form-section.active {
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logos">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+        <div class="logo">
+            <img src="https://placehold.co/200x100" alt="شعار اليوم العلمي">
+        </div>
+        <h1>تسجيل الدخول - اليوم العلمي</h1>
+
+        <div class="login-options">
+            <div class="option-buttons">
+                <button class="option-button active" onclick="switchForm('code')">الدخول برمز الحضور</button>
+                <button class="option-button" onclick="switchForm('credentials')">الدخول بالبيانات</button>
+            </div>
         </div>
 
-        <div class="login-form">
-            <h2>تسجيل الدخول لليوم العلمي</h2>
-
-            <div class="login-options">
-                <div class="login-option active" onclick="switchLoginMethod('code')">الدخول برمز الحضور</div>
-                <div class="login-option" onclick="switchLoginMethod('credentials')">الدخول بالبيانات</div>
+        <form id="loginForm" onsubmit="handleSubmit(event)">
+            <div id="codeSection" class="form-section active">
+                <div class="form-group">
+                    <label for="attendanceCode">رمز الحضور:</label>
+                    <input type="text" id="attendanceCode" name="attendanceCode" placeholder="أدخل رمز الحضور">
+                </div>
             </div>
 
-            <form id="loginForm">
-                <div id="codeLogin">
-                    <div class="form-group">
-                        <label for="attendanceCode">رمز الحضور:</label>
-                        <input type="text" id="attendanceCode" placeholder="أدخل رمز الحضور">
-                    </div>
+            <div id="credentialsSection" class="form-section">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني:</label>
+                    <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني">
                 </div>
-
-                <div id="credentialsLogin" style="display: none;">
-                    <div class="form-group">
-                        <label for="email">البريد الإلكتروني:</label>
-                        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">رقم الجوال:</label>
-                        <input type="tel" id="phone" placeholder="أدخل رقم الجوال">
-                    </div>
+                <div class="form-group">
+                    <label for="phone">رقم الجوال:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الجوال">
                 </div>
+            </div>
 
-                <button type="submit">دخول</button>
-            </form>
-        </div>
+            <button type="submit" class="submit-button">تسجيل الدخول</button>
+        </form>
     </div>
 
     <script>
-        function switchLoginMethod(method) {
-            const codeLogin = document.getElementById('codeLogin');
-            const credentialsLogin = document.getElementById('credentialsLogin');
-            const options = document.querySelectorAll('.login-option');
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
 
-            options.forEach(option => option.classList.remove('active'));
+        function switchForm(type) {
+            const codeButton = document.querySelector('button[onclick="switchForm(\'code\')"]');
+            const credentialsButton = document.querySelector('button[onclick="switchForm(\'credentials\')"]');
+            const codeSection = document.getElementById('codeSection');
+            const credentialsSection = document.getElementById('credentialsSection');
 
-            if (method === 'code') {
-                codeLogin.style.display = 'block';
-                credentialsLogin.style.display = 'none';
-                options[0].classList.add('active');
-                document.getElementById('email').value = '';
-                document.getElementById('phone').value = '';
+            if (type === 'code') {
+                codeButton.classList.add('active');
+                credentialsButton.classList.remove('active');
+                codeSection.classList.add('active');
+                credentialsSection.classList.remove('active');
             } else {
-                codeLogin.style.display = 'none';
-                credentialsLogin.style.display = 'block';
-                options[1].classList.add('active');
-                document.getElementById('attendanceCode').value = '';
+                credentialsButton.classList.add('active');
+                codeButton.classList.remove('active');
+                credentialsSection.classList.add('active');
+                codeSection.classList.remove('active');
             }
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        function handleSubmit(event) {
+            event.preventDefault();
 
-            const form = this;
-            form.classList.add('loading');
+            const formData = {
+                attendanceCode: document.getElementById('attendanceCode').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
 
-            const attendanceCode = document.getElementById('attendanceCode').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
+            console.log('بيانات النموذج:', formData);
 
-            console.log('بيانات النموذج:', { attendanceCode, email, phone });
-
-            try {
-                if (!attendanceCode && (!email || !phone)) {
-                    throw new Error('يرجى إدخال جميع البيانات المطلوبة');
-                }
-
-                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
-                url.searchParams.append('action', 'verifyUser');
-
-                if (attendanceCode) {
-                    url.searchParams.append('attendanceCode', attendanceCode);
-                } else {
-                    url.searchParams.append('email', email);
-                    url.searchParams.append('phone', phone);
-                }
-
-                console.log('إرسال طلب إلى:', url.toString());
-
-                const response = await fetch(url);
-                console.log('استجابة الخادم:', response.status);
-
-                const data = await response.json();
-                console.log('بيانات الاستجابة:', data);
-
-                if (data && data.success && data.data) {
-                    console.log('تم التحقق من المستخدم بنجاح');
-
-                    // مسح البيانات القديمة
-                    localStorage.clear();
-
-                    // تخزين البيانات الجديدة
-                    localStorage.setItem('userEmail', data.data.email || '');
-                    localStorage.setItem('userPhone', data.data.phone || '');
-                    localStorage.setItem('userName', data.data.name || '');
-                    localStorage.setItem('userGender', data.data.gender || '');
-                    localStorage.setItem('userType', data.data.type || '');
-                    localStorage.setItem('userCountry', data.data.country || '');
-                    localStorage.setItem('attendanceStatus', data.data.attendanceStatus ? 'true' : 'false');
-
-                    console.log('تم تخزين البيانات في localStorage');
-                    console.log('جاري التوجيه إلى صفحة الملف الشخصي...');
-
-                    window.location.href = 'profile.html';
-                } else {
-                    throw new Error(data.message || 'لم يتم العثور على المستخدم');
-                }
-            } catch (error) {
-                console.error('خطأ:', error);
-                alert(error.message || 'حدث خطأ أثناء تسجيل الدخول');
-            } finally {
-                form.classList.remove('loading');
+            let url = `${SCRIPT_URL}?action=verifyUser`;
+            if (formData.attendanceCode) {
+                url += `&attendanceCode=${encodeURIComponent(formData.attendanceCode)}`;
+            } else {
+                url += `&email=${encodeURIComponent(formData.email)}&phone=${encodeURIComponent(formData.phone)}`;
             }
-        });
+
+            console.log('إرسال طلب إلى:', url);
+
+            fetch(url)
+                .then(response => {
+                    console.log('استجابة الخادم:', response.status);
+                    return response.text();
+                })
+                .then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.success) {
+                            localStorage.setItem('userData', JSON.stringify(data.data));
+                            window.location.href = 'profile.html';
+                        } else {
+                            alert(data.message || 'خطأ في تسجيل الدخول');
+                        }
+                    } catch (error) {
+                        console.log('خطأ:', error);
+                        alert('حدث خطأ في معالجة البيانات');
+                    }
+                })
+                .catch(error => {
+                    console.log('خطأ في الاتصال:', error);
+                    alert('حدث خطأ في الاتصال بالخادم');
+                });
+        }
     </script>
 </body>
 </html>
