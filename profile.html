@@ -360,7 +360,7 @@ async function markAttendance() {
     const userData = JSON.parse(localStorage.getItem('userData'));
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbzvyHgdO_9E7Z-F-zovjNhXeU0FASLvouvhQR3y-PABW59tNhzoZUzd7R7P6lApETU8/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbwtpbih5oj1aCOpVVGLSu1tEYlX25MkAaR9mHoN-GeITScdsOaOC2ZwpH-OoAcWzko/exec');
         url.searchParams.append('action', 'markAttendance');
         url.searchParams.append('email', userData.email);
         url.searchParams.append('phone', userData.phone);
@@ -394,7 +394,7 @@ async function downloadCertificate() {
     }
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbzvyHgdO_9E7Z-F-zovjNhXeU0FASLvouvhQR3y-PABW59tNhzoZUzd7R7P6lApETU8/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbwtpbih5oj1aCOpVVGLSu1tEYlX25MkAaR9mHoN-GeITScdsOaOC2ZwpH-OoAcWzko/exec');
         url.searchParams.append('action', 'verifyUser');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
