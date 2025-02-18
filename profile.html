@@ -227,7 +227,7 @@
                     markAttendanceBtn.disabled = true;
                     markAttendanceBtn.textContent = 'جاري تسجيل الحضور...';
 
-                    const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                    const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
                     url.searchParams.append('action', 'markAttendance');
                     url.searchParams.append('email', userData.email);
                     url.searchParams.append('phone', userData.phone);
@@ -262,7 +262,7 @@
                     downloadCertificateBtn.disabled = true;
                     downloadCertificateBtn.textContent = 'جاري تحميل الشهادة...';
 
-                    const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
+                    const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
                     url.searchParams.append('action', 'getCertificate');
                     url.searchParams.append('email', userData.email);
                     url.searchParams.append('phone', userData.phone);
