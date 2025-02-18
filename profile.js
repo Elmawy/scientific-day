@@ -1,25 +1,63 @@
 // تحميل بيانات المستخدم عند تحميل الصفحة
-window.onload = function() {
-    if (!localStorage.getItem('userEmail')) {
+window.onload = async function() {
+    console.log('🔍 تحميل بيانات المستخدم...');
+    
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+        console.log('📡 محاولة جلب البيانات من Google Sheets...');
+        await fetchUserDataFromGoogleSheets();
+    } else {
+        loadUserData(JSON.parse(userDataString));
+    }
+};
+
+async function fetchUserDataFromGoogleSheets() {
+    const email = localStorage.getItem('userEmail');
+    const phone = localStorage.getItem('userPhone');
+
+    if (!email || !phone) {
+        console.warn('⚠️ بيانات تسجيل الدخول غير متوفرة، إعادة التوجيه...');
         window.location.href = 'login.html';
         return;
     }
-    loadUserData();
-};
 
-// تحميل بيانات المستخدم
-function loadUserData() {
-    document.getElementById('userName').textContent = localStorage.getItem('userName') || '-';
-    document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || '-';
-    document.getElementById('userPhone').textContent = localStorage.getItem('userPhone') || '-';
-    document.getElementById('userGender').textContent = localStorage.getItem('userGender') || '-';
-    document.getElementById('userType').textContent = localStorage.getItem('userType') || '-';
-    document.getElementById('userCountry').textContent = localStorage.getItem('userCountry') || '-';
+    try {
+        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec');
+        url.searchParams.append('action', 'verifyUser');
+        url.searchParams.append('email', email);
+        url.searchParams.append('phone', phone);
 
-    const attendanceStatus = localStorage.getItem('attendanceStatus');
-    if (attendanceStatus === 'true') {
-        document.getElementById('attendanceBtn').disabled = true;
-        document.getElementById('attendanceBtn').textContent = 'تم تسجيل الحضور';
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.success) {
+            console.log('✅ بيانات المستخدم من Google Sheets:', data.data);
+            localStorage.setItem('userData', JSON.stringify(data.data));
+            loadUserData(data.data);
+        } else {
+            console.error('❌ خطأ في جلب البيانات:', data.message);
+        }
+    } catch (error) {
+        console.error('❌ خطأ أثناء جلب البيانات:', error);
+    }
+}
+
+function loadUserData(userData) {
+    console.log('✅ تحميل بيانات المستخدم إلى الصفحة...');
+    setElementText('userName', userData.name);
+    setElementText('userEmail', userData.email);
+    setElementText('userPhone', userData.phone);
+    setElementText('userGender', userData.gender);
+    setElementText('userType', userData.type);
+    setElementText('userCountry', userData.country);
+}
+
+function setElementText(id, text) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.textContent = text || 'غير متوفر';
+    } else {
+        console.error(`❌ العنصر #${id} غير موجود في HTML`);
     }
 }
 
@@ -29,7 +67,7 @@ async function markAttendance() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec');
         url.searchParams.append('action', 'markAttendance');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
@@ -57,7 +95,7 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        const url = new URL('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec');
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
@@ -77,4 +115,3 @@ async function downloadCertificate() {
         alert('حدث خطأ في تحميل الشهادة');
     }
 }
-
