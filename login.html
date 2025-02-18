@@ -176,8 +176,8 @@
 <body>
     <div class="container">
         <div class="logos">
-            <img src="./شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="./شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
+            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
         </div>
 
         <div class="login-form">
@@ -199,40 +199,41 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const form = this;
             form.classList.add('loading');
 
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-
             try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec');
-                url.searchParams.append('action', 'verifyUser');
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
 
-                const response = await fetch(url, {
-                    method: 'GET'
-                });
-
+                // تأكد من تغيير هذا الرابط برابط Google Apps Script الخاص بك
+                const url = 'https://script.google.com/macros/s/AKfycbzfpP-NyL-k3jbc8j_B9KNiRVuKe54nAIWA-UWcC7ZUlHCRxH3M9-RvyZc4npFUpmv-/exec';
+                const response = await fetch(`${url}?action=verifyUser&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`);
                 const data = await response.json();
 
-                if (data && data.success) {
+                console.log('Response:', data); // للتحقق من الاستجابة
+
+                if (data.success) {
+                    // تخزين بيانات المستخدم
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('userPhone', phone);
                     localStorage.setItem('userName', data.name);
                     localStorage.setItem('userGender', data.gender);
                     localStorage.setItem('userType', data.type);
                     localStorage.setItem('userCountry', data.country);
-                    localStorage.setItem('attendanceStatus', data.attendanceStatus || 'false');
+                    localStorage.setItem('attendanceStatus', data.attendanceStatus);
+                    
+                    // التحقق من تخزين البيانات
+                    console.log('Stored data:', localStorage);
+                    
+                    // الانتقال إلى صفحة الملف الشخصي
                     window.location.href = 'profile.html';
                 } else {
-                    alert(data.message || 'البيانات غير صحيحة. الرجاء التحقق من البريد الإلكتروني ورقم الجوال');
+                    alert(data.message || 'البيانات غير صحيحة');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('حدث خطأ في تسجيل الدخول. الرجاء المحاولة مرة أخرى');
+                alert('حدث خطأ في تسجيل الدخول');
             } finally {
                 form.classList.remove('loading');
             }
