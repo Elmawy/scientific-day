@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البيانات الشخصية - اليوم العلمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #005C97;
+            --secondary-color: #363795;
+            --accent-color: #00BCD4;
+            --text-color: #2C3E50;
+            --background-color: #F5F7FA;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', sans-serif;
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: var(--background-color);
             min-height: 100vh;
             padding: 20px;
         }
@@ -39,7 +48,7 @@
         }
 
         h1 {
-            color: #333;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
             font-size: 24px;
@@ -51,9 +60,10 @@
 
         .info-item {
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 15px;
             background-color: #f9f9f9;
-            border-radius: 5px;
+            border-radius: 8px;
+            border-right: 4px solid var(--primary-color);
         }
 
         .info-label {
@@ -64,6 +74,7 @@
 
         .info-value {
             color: #333;
+            font-size: 16px;
         }
 
         .actions {
@@ -76,10 +87,11 @@
             flex: 1;
             padding: 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
         }
 
         .attendance-button {
@@ -89,11 +101,13 @@
 
         .attendance-button:hover {
             background-color: #45a049;
+            transform: translateY(-2px);
         }
 
         .attendance-button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            transform: none;
         }
 
         .certificate-button {
@@ -103,11 +117,13 @@
 
         .certificate-button:hover {
             background-color: #1e88e5;
+            transform: translateY(-2px);
         }
 
         .certificate-button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            transform: none;
         }
 
         .logout-button {
@@ -117,13 +133,28 @@
 
         .logout-button:hover {
             background-color: #e53935;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://placehold.co/200x100" alt="شعار اليوم العلمي">
+            <img src="شعار الجامع.png" alt="شعار اليوم العلمي">
         </div>
         <h1>البيانات الشخصية - اليوم العلمي</h1>
 
@@ -159,17 +190,25 @@
 
         window.onload = function() {
             const userDataString = localStorage.getItem('userData');
+            console.log('Loaded user data:', userDataString);
+            
             if (!userDataString) {
+                console.log('No user data found, redirecting to login...');
                 window.location.href = 'login.html';
                 return;
             }
 
             try {
                 userData = JSON.parse(userDataString);
+                if (!userData || !userData.email) {
+                    throw new Error('Invalid user data');
+                }
+                console.log('User data parsed successfully:', userData);
                 displayUserData();
                 updateButtons();
             } catch (error) {
                 console.error('Error loading user data:', error);
+                localStorage.clear();
                 window.location.href = 'login.html';
             }
         };
@@ -178,7 +217,7 @@
             document.getElementById('userName').textContent = userData.name || '-';
             document.getElementById('userEmail').textContent = userData.email || '-';
             document.getElementById('userPhone').textContent = userData.phone || '-';
-            document.getElementById('attendanceStatus').textContent = userData.attendance || 'لم يتم التسجيل';
+            document.getElementById('attendanceStatus').textContent = userData.attendance ? 'حاضر' : 'لم يتم التسجيل';
         }
 
         function updateButtons() {
@@ -203,7 +242,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        userData.attendance = 'حاضر';
+                        userData.attendance = true;
                         localStorage.setItem('userData', JSON.stringify(userData));
                         displayUserData();
                         updateButtons();
