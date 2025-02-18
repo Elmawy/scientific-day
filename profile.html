@@ -11,48 +11,61 @@
             background-color: #f4f3ee;
             font-family: 'Tajawal', sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         .header {
             background: #0d6efd;
             color: white;
             text-align: center;
             padding: 20px;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             border-bottom: 5px solid #ddd;
         }
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 50px auto;
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .motivation {
             background: #eef0f3;
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
             color: #333;
             font-weight: bold;
-            border-right: 5px solid #0d6efd;
-            padding-right: 10px;
+            border-right: 6px solid #0d6efd;
+            padding-right: 15px;
+            line-height: 1.8;
+        }
+        .logos {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
         }
         .logo {
-            width: 120px;
-            margin: 15px auto;
+            width: 140px;
+            height: auto;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
         }
         .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
+            width: 80%;
+            padding: 15px;
             border: none;
             background-color: #198754;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
@@ -68,15 +81,19 @@
         اليوم العلمي - مجلس سماع كتاب أخصر المختصرات
     </div>
     <div class="container">
-        <img src="شعار الجامع.png" class="logo" alt="شعار الجامع">
-        <img src="شعار جمعية اثر الجديد بدون خلفية.png" class="logo" alt="شعار الجمعية">
+        <div class="logos">
+            <img src="شعار الجامع.png" class="logo" alt="شعار الجامع">
+            <img src="شعار جمعية اثر الجديد بدون خلفية.png" class="logo" alt="شعار الجمعية">
+        </div>
         <div class="motivation">
             🌿 "طلب العلم فريضة، ومجلس العلم نورٌ للقلب والفكر" 🌿
             <br>
             "نرحب بكم في هذا المجلس المبارك، جعلنا الله وإياكم من أهل العلم والعمل"
         </div>
-        <button class="btn" onclick="location.href='login.html'">🔑 تسجيل الدخول</button>
-        <button class="btn" onclick="location.href='profile.html'">📜 الصفحة الشخصية</button>
+        <div class="buttons">
+            <button class="btn" onclick="location.href='login.html'">🔑 تسجيل الدخول</button>
+            <button class="btn" onclick="location.href='profile.html'">📜 الصفحة الشخصية</button>
+        </div>
     </div>
 </body>
 </html>
