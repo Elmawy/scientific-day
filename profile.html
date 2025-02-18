@@ -370,7 +370,8 @@
             const phone = localStorage.getItem('userPhone');
 
             try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
+                const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+                url.searchParams.append('action', 'verifyUser');');
                 url.searchParams.append('action', 'markAttendance');
                 url.searchParams.append('email', email);
                 url.searchParams.append('phone', phone);
@@ -399,7 +400,8 @@
             const phone = localStorage.getItem('userPhone');
 
             try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbzITDLb2tDqcnS3izAcRiAsGsmEFY-lpAN8uhRV433rrMv3uYDvgIGBCT4OF9-KW8tP/exec');
+                const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+                url.searchParams.append('action', 'verifyUser');');
                 url.searchParams.append('action', 'getCertificate');
                 url.searchParams.append('email', email);
                 url.searchParams.append('phone', phone);
