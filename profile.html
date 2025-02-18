@@ -171,20 +171,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('تحميل الصفحة');
+            
             // التحقق من وجود بيانات المستخدم
             const userData = {
-                name: localStorage.getItem('userName'),
                 email: localStorage.getItem('userEmail'),
                 phone: localStorage.getItem('userPhone'),
+                name: localStorage.getItem('userName'),
                 gender: localStorage.getItem('userGender'),
                 type: localStorage.getItem('userType'),
                 country: localStorage.getItem('userCountry'),
                 attendanceStatus: localStorage.getItem('attendanceStatus') === 'true'
             };
 
-            // إذا لم تكن هناك بيانات، نعيد التوجيه إلى صفحة تسجيل الدخول
+            console.log('البيانات المخزنة:', userData);
+
             if (!userData.email || !userData.phone) {
-                window.location.replace('./login.html');
+                console.log('لم يتم العثور على بيانات المستخدم، جاري التوجيه إلى صفحة تسجيل الدخول');
+                window.location.href = 'login.html';
                 return;
             }
 
@@ -196,7 +200,7 @@
             document.getElementById('userType').textContent = userData.type || '-';
             document.getElementById('userCountry').textContent = userData.country || '-';
             
-            // تحديث حالة الحضور مع التنسيق
+            // تحديث حالة الحضور
             const attendanceStatusElement = document.getElementById('attendanceStatus');
             if (userData.attendanceStatus) {
                 attendanceStatusElement.textContent = 'حاضر';
@@ -206,7 +210,7 @@
                 attendanceStatusElement.classList.add('status-absent');
             }
 
-            // إدارة أزرار الحضور والشهادة
+            // إدارة الأزرار
             const markAttendanceBtn = document.getElementById('markAttendance');
             const downloadCertificateBtn = document.getElementById('downloadCertificate');
 
@@ -219,6 +223,7 @@
             // معالجة تسجيل الحضور
             markAttendanceBtn.addEventListener('click', async function() {
                 try {
+                    console.log('محاولة تسجيل الحضور');
                     markAttendanceBtn.disabled = true;
                     markAttendanceBtn.textContent = 'جاري تسجيل الحضور...';
 
@@ -227,16 +232,23 @@
                     url.searchParams.append('email', userData.email);
                     url.searchParams.append('phone', userData.phone);
 
+                    console.log('إرسال طلب إلى:', url.toString());
+
                     const response = await fetch(url);
+                    console.log('استجابة الخادم:', response.status);
+                    
                     const data = await response.json();
+                    console.log('بيانات الاستجابة:', data);
 
                     if (data.success) {
                         localStorage.setItem('attendanceStatus', 'true');
+                        console.log('تم تسجيل الحضور بنجاح');
                         window.location.reload();
                     } else {
                         throw new Error(data.message || 'فشل تسجيل الحضور');
                     }
                 } catch (error) {
+                    console.error('خطأ:', error);
                     alert(error.message || 'حدث خطأ أثناء تسجيل الحضور');
                     markAttendanceBtn.disabled = false;
                     markAttendanceBtn.textContent = 'تسجيل الحضور';
@@ -246,6 +258,7 @@
             // معالجة تحميل الشهادة
             downloadCertificateBtn.addEventListener('click', async function() {
                 try {
+                    console.log('محاولة تحميل الشهادة');
                     downloadCertificateBtn.disabled = true;
                     downloadCertificateBtn.textContent = 'جاري تحميل الشهادة...';
 
@@ -254,8 +267,13 @@
                     url.searchParams.append('email', userData.email);
                     url.searchParams.append('phone', userData.phone);
 
+                    console.log('إرسال طلب إلى:', url.toString());
+
                     const response = await fetch(url);
+                    console.log('استجابة الخادم:', response.status);
+                    
                     const data = await response.json();
+                    console.log('بيانات الاستجابة:', data);
 
                     if (data.success && data.certificateUrl) {
                         window.open(data.certificateUrl, '_blank');
@@ -263,6 +281,7 @@
                         throw new Error(data.message || 'الشهادة غير متوفرة حالياً');
                     }
                 } catch (error) {
+                    console.error('خطأ:', error);
                     alert(error.message || 'حدث خطأ أثناء تحميل الشهادة');
                 } finally {
                     downloadCertificateBtn.disabled = false;
@@ -272,8 +291,9 @@
 
             // معالجة تسجيل الخروج
             document.getElementById('logout').addEventListener('click', function() {
+                console.log('تسجيل الخروج');
                 localStorage.clear();
-                window.location.replace('./login.html');
+                window.location.href = 'login.html';
             });
         });
     </script>
