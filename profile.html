@@ -9,7 +9,6 @@
         :root {
             --primary-color: #005C97;
             --secondary-color: #363795;
-            --accent-color: #00BCD4;
             --text-color: #2C3E50;
             --background-color: #F5F7FA;
         }
@@ -24,46 +23,47 @@
         body {
             background-color: var(--background-color);
             min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header img {
+            height: 50px;
         }
 
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        .logo {
+        .welcome-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        .logo img {
-            max-width: 200px;
-            height: auto;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        .user-info {
-            margin-bottom: 30px;
+        .info-section {
+            padding: 30px;
         }
 
         .info-item {
-            margin-bottom: 15px;
             padding: 15px;
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
             border-radius: 8px;
             border-right: 4px solid var(--primary-color);
+            margin-bottom: 15px;
         }
 
         .info-label {
@@ -79,8 +79,8 @@
 
         .actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 30px;
         }
 
         .action-button {
@@ -91,96 +91,76 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Tajawal', sans-serif;
+            font-weight: bold;
         }
 
         .attendance-button {
-            background-color: #4CAF50;
+            background-color: var(--primary-color);
             color: white;
-        }
-
-        .attendance-button:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
         }
 
         .attendance-button:disabled {
-            background-color: #cccccc;
+            background-color: #ccc;
             cursor: not-allowed;
-            transform: none;
         }
 
         .certificate-button {
-            background-color: #2196F3;
+            background-color: #808080;
             color: white;
-        }
-
-        .certificate-button:hover {
-            background-color: #1e88e5;
-            transform: translateY(-2px);
-        }
-
-        .certificate-button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .logout-button {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .logout-button:hover {
-            background-color: #e53935;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            .action-button {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="شعار الجامع.png" alt="شعار اليوم العلمي">
-        </div>
-        <h1>البيانات الشخصية - اليوم العلمي</h1>
+    <div class="header">
+        <img src="شعار الجامع.png" alt="شعار الجامعة">
+        <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية">
+    </div>
 
-        <div class="user-info">
+    <div class="container">
+        <div class="welcome-section">
+            <h2>حياك الله، <span id="welcomeName"></span></h2>
+            <p>يسعدنا بوجودك معنا في اليوم العلمي</p>
+        </div>
+
+        <div class="info-section">
             <div class="info-item">
                 <div class="info-label">الاسم:</div>
-                <div class="info-value" id="userName">-</div>
+                <div class="info-value" id="userName"></div>
             </div>
+
             <div class="info-item">
                 <div class="info-label">البريد الإلكتروني:</div>
-                <div class="info-value" id="userEmail">-</div>
+                <div class="info-value" id="userEmail"></div>
             </div>
+
             <div class="info-item">
                 <div class="info-label">رقم الجوال:</div>
-                <div class="info-value" id="userPhone">-</div>
+                <div class="info-value" id="userPhone"></div>
             </div>
-            <div class="info-item">
-                <div class="info-label">حالة الحضور:</div>
-                <div class="info-value" id="attendanceStatus">-</div>
-            </div>
-        </div>
 
-        <div class="actions">
-            <button id="attendanceButton" class="action-button attendance-button" onclick="markAttendance()">تسجيل الحضور</button>
-            <button id="certificateButton" class="action-button certificate-button" onclick="getCertificate()">تحميل الشهادة</button>
-            <button class="action-button logout-button" onclick="logout()">تسجيل الخروج</button>
+            <div class="info-item">
+                <div class="info-label">الجنس:</div>
+                <div class="info-value" id="userGender">أنثى</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">نوع المشاركة:</div>
+                <div class="info-value" id="participationType">عن بعد (البث المباشر)</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">الدولة:</div>
+                <div class="info-value" id="userCountry">السعودية مكة</div>
+            </div>
+
+            <div class="actions">
+                <button class="action-button attendance-button" id="attendanceButton" onclick="markAttendance()">
+                    تسجيل الحضور
+                </button>
+                <button class="action-button certificate-button" id="certificateButton" onclick="getCertificate()">
+                    تحميل الشهادة
+                </button>
+            </div>
         </div>
     </div>
 
@@ -190,10 +170,7 @@
 
         window.onload = function() {
             const userDataString = localStorage.getItem('userData');
-            console.log('Loaded user data:', userDataString);
-            
             if (!userDataString) {
-                console.log('No user data found, redirecting to login...');
                 window.location.href = 'login.html';
                 return;
             }
@@ -203,7 +180,6 @@
                 if (!userData || !userData.email) {
                     throw new Error('Invalid user data');
                 }
-                console.log('User data parsed successfully:', userData);
                 displayUserData();
                 updateButtons();
             } catch (error) {
@@ -214,17 +190,18 @@
         };
 
         function displayUserData() {
-            document.getElementById('userName').textContent = userData.name || '-';
-            document.getElementById('userEmail').textContent = userData.email || '-';
-            document.getElementById('userPhone').textContent = userData.phone || '-';
-            document.getElementById('attendanceStatus').textContent = userData.attendance ? 'حاضر' : 'لم يتم التسجيل';
+            const firstName = userData.name.split(' ')[0];
+            document.getElementById('welcomeName').textContent = firstName;
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('userPhone').textContent = userData.phone;
         }
 
         function updateButtons() {
             const attendanceButton = document.getElementById('attendanceButton');
             const certificateButton = document.getElementById('certificateButton');
 
-            if (userData.attendance) {
+            if (userData.attendance === 'حاضر') {
                 attendanceButton.disabled = true;
                 attendanceButton.textContent = 'تم تسجيل الحضور';
             }
@@ -235,49 +212,41 @@
             }
         }
 
-        function markAttendance() {
-            const url = `${SCRIPT_URL}?action=markAttendance&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
+        async function markAttendance() {
+            try {
+                const url = `${SCRIPT_URL}?action=markAttendance&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        userData.attendance = true;
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        displayUserData();
-                        updateButtons();
-                        alert('تم تسجيل الحضور بنجاح');
-                    } else {
-                        alert(data.message || 'حدث خطأ في تسجيل الحضور');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error marking attendance:', error);
-                    alert('حدث خطأ في الاتصال بالخادم');
-                });
+                if (data.success) {
+                    userData.attendance = 'حاضر';
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    updateButtons();
+                    alert('تم تسجيل الحضور بنجاح');
+                } else {
+                    throw new Error(data.message || 'حدث خطأ في تسجيل الحضور');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            }
         }
 
-        function getCertificate() {
-            const url = `${SCRIPT_URL}?action=getCertificate&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
+        async function getCertificate() {
+            try {
+                const url = `${SCRIPT_URL}?action=getCertificate&email=${encodeURIComponent(userData.email)}&phone=${encodeURIComponent(userData.phone)}`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.certificateLink) {
-                        window.open(data.certificateLink, '_blank');
-                    } else {
-                        alert(data.message || 'الشهادة غير متوفرة');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error getting certificate:', error);
-                    alert('حدث خطأ في الاتصال بالخادم');
-                });
-        }
-
-        function logout() {
-            localStorage.removeItem('userData');
-            window.location.href = 'login.html';
+                if (data.success && data.certificateLink) {
+                    window.open(data.certificateLink, '_blank');
+                } else {
+                    throw new Error(data.message || 'الشهادة غير متوفرة');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            }
         }
     </script>
 </body>
