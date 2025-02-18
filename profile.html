@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البيانات الشخصية - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <!-- إضافة مكتبة Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #005C97;
             --secondary-color: #363795;
+            --accent-color: #00BCD4;
             --text-color: #2C3E50;
             --background-color: #F5F7FA;
             --success-color: #28a745;
@@ -29,6 +31,33 @@
             min-height: 100vh;
         }
 
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            height: 60px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -41,24 +70,85 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(0,92,151,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(0,92,151,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-group:hover {
+            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
+            transform: translateY(-2px);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+            margin-left: 10px;
         }
 
         .button {
             background: var(--primary-color);
             color: white;
+            border: none;
             padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
         .button:disabled {
             background: #ccc;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button i {
+            font-size: 18px;
         }
 
         .button-group {
@@ -66,6 +156,85 @@
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .attendance-status {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: var(--success-color);
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logout-btn {
+                position: static;
+                margin: 10px auto;
+                width: fit-content;
+            }
         }
 
         .toast {
@@ -77,24 +246,80 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            تسجيل الخروج
+        </button>
+        <div class="logo-container">
+            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
+            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
+        </div>
+    </header>
+
     <div class="container">
         <div class="profile-card">
-            <h2>مرحبا <span id="welcomeName">-</span></h2>
+            <div class="welcome-banner">
+                <h2><i class="fas fa-user-circle"></i> حياك الله <span id="welcomeName">-</span></h2>
+                <p>سعدنا بوجودك معنا في اليوم العلمي</p>
+            </div>
 
-            <div id="attendanceStatus" class="attendance-status" style="display:none;">
+            <div class="info-group">
+                <h3><i class="fas fa-info-circle"></i> معلومات المستخدم</h3>
+                <div class="info-item">
+                    <span><i class="fas fa-user"></i> الاسم:</span>
+                    <span id="userName">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-envelope"></i> البريد الإلكتروني:</span>
+                    <span id="userEmail">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-phone"></i> رقم الجوال:</span>
+                    <span id="userPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-venus-mars"></i> الجنس:</span>
+                    <span id="userGender">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-user-tag"></i> نوع المشاركة:</span>
+                    <span id="userType">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-globe"></i> الدولة:</span>
+                    <span id="userCountry">-</span>
+                </div>
+            </div>
+
+            <div id="attendanceStatus" class="attendance-status">
                 <i class="fas fa-check-circle"></i> تم تسجيل حضورك بنجاح!
             </div>
 
             <div class="button-group">
                 <button id="attendanceBtn" class="button" onclick="markAttendance()">
-                    <i class="fas fa-clipboard-check"></i> تسجيل الحضور
+                    <i class="fas fa-clipboard-check"></i>
+                    تسجيل الحضور
                 </button>
                 <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>
-                    <i class="fas fa-certificate"></i> تحميل الشهادة
+                    <i class="fas fa-certificate"></i>
+                    تحميل الشهادة
                 </button>
             </div>
         </div>
@@ -104,114 +329,106 @@
 
     <script>
         window.onload = function() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
+    const userData = JSON.parse(localStorage.getItem('userData'));
 
-            if (!userData || !userData.email) {
-                window.location.href = 'index.html';
-                return;
-            }
+    if (!userData || !userData.email) {
+        window.location.href = 'profile.html';
+        return;
+    }
 
-            document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+    loadUserData(userData);
+};
 
-            if (localStorage.getItem('attendanceStatus') === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('certificateBtn').disabled = false;
-                document.getElementById('attendanceStatus').style.display = 'block';
-            }
-        };
+function loadUserData(userData) {
+    document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+    document.getElementById('userName').textContent = userData.name || '-';
+    document.getElementById('userEmail').textContent = userData.email || '-';
+    document.getElementById('userPhone').textContent = userData.phone || '-';
+    document.getElementById('userGender').textContent = userData.gender || '-';
+    document.getElementById('userType').textContent = userData.type || '-';
+    document.getElementById('userCountry').textContent = userData.country || '-';
 
-        async function markAttendance() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
+    if (localStorage.getItem('attendanceStatus') === 'true') {
+        document.getElementById('attendanceBtn').disabled = true;
+        document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
+        document.getElementById('certificateBtn').disabled = false;
+        document.getElementById('attendanceStatus').style.display = 'block';
+    }
+}
 
-            if (!userData || !userData.email || !userData.phone) {
-                showToast('⚠️ يرجى التأكد من تسجيل الدخول أولًا.', false);
-                return;
-            }
+async function markAttendance() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
 
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', userData.email);
-                url.searchParams.append('phone', userData.phone);
+    try {
+        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        url.searchParams.append('action', 'markAttendance');
+        url.searchParams.append('email', userData.email);
+        url.searchParams.append('phone', userData.phone);
 
-                const response = await fetch(url, { method: "GET" });
+        const response = await fetch(url);
+        const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+        if (data.success) {
+            localStorage.setItem('attendanceStatus', 'true');
+            document.getElementById('attendanceBtn').disabled = true;
+            document.getElementById('attendanceBtn').innerHTML = '<i class="fas fa-check"></i> تم تسجيل الحضور';
+            document.getElementById('certificateBtn').disabled = false;
+            document.getElementById('attendanceStatus').style.display = 'block';
+            showToast('✅ تم تسجيل حضورك بنجاح!', true);
+        } else {
+            showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
+        }
+    } catch (error) {
+        console.error('⚠️ خطأ:', error);
+        showToast('❌ حدث خطأ في تسجيل الحضور', false);
+    }
+}
 
-                const data = await response.json();
+async function downloadCertificate() {
+    const email = localStorage.getItem('userEmail');
+    const phone = localStorage.getItem('userPhone');
 
-                if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('certificateBtn').disabled = false;
-                    document.getElementById('attendanceStatus').style.display = 'block';
-                    showToast('✅ تم تسجيل حضورك بنجاح!', true);
-                } else {
-                    showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
-                }
-            } catch (error) {
-                console.error('⚠️ خطأ:', error);
-                showToast('❌ حدث خطأ أثناء تسجيل الحضور', false);
-            }
+    if (!email || !phone) {
+        alert('⚠️ يرجى التأكد من تسجيل الدخول أولًا.');
+        return;
+    }
+
+    try {
+        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        url.searchParams.append('action', 'verifyUser');
+        url.searchParams.append('email', email);
+        url.searchParams.append('phone', phone);
+
+        const response = await fetch(url, { method: "GET" });
+
+        console.log('🔍 Response:', response); // التحقق من الاستجابة
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        async function downloadCertificate() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
+        const data = await response.json();
+        console.log('🔍 Data:', data); // تحقق من البيانات المستلمة
 
-            if (!userData || !userData.email || !userData.phone) {
-                showToast('⚠️ يرجى التأكد من تسجيل الدخول أولًا.', false);
-                return;
-            }
-
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
-                url.searchParams.append('action', 'verifyUser');
-                url.searchParams.append('email', userData.email);
-                url.searchParams.append('phone', userData.phone);
-
-                const response = await fetch(url, { method: "GET" });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.success && data.data.certificateLink) {
-                    window.open(data.data.certificateLink, '_blank');
-                } else {
-                    showToast(data.message || '❌ لم يتم العثور على الشهادة', false);
-                }
-            } catch (error) {
-                console.error('⚠️ خطأ:', error);
-                showToast('❌ حدث خطأ أثناء تحميل الشهادة', false);
-            }
+        if (data.success && data.data.certificateLink) {
+            window.open(data.data.certificateLink, '_blank');
+        } else {
+            alert(data.message || '❌ لم يتم العثور على الشهادة');
         }
+    } catch (error) {
+        console.error('⚠️ خطأ:', error);
+        alert('❌ حدث خطأ أثناء تحميل الشهادة');
+    }
 
-        function showToast(message, success = true) {
-            const toast = document.getElementById('toast');
-            
-            if (!toast) {
-                console.error("❌ عنصر `#toast` غير موجود في HTML.");
-                return;
-            }
+}
 
-            toast.textContent = message;
-            toast.style.background = success ? 'green' : 'red';
-            toast.style.color = 'white';
-            toast.style.padding = '10px 15px';
-            toast.style.borderRadius = '5px';
-            toast.style.position = 'fixed';
-            toast.style.bottom = '20px';
-            toast.style.right = '20px';
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
+function logout() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+}
+
     </script>
 </body>
 </html>
+
+
