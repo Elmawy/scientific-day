@@ -34,66 +34,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('🔄 محاولة تسجيل الدخول...');
 
-        let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec';
+        let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec?action=verifyUser';
         
-        const params = new URLSearchParams({
-            action: 'verifyUser'
-        });
-
         if (attendanceCode) {
-            params.append('attendanceCode', attendanceCode);
+            url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
         } else if (email && phone) {
-            params.append('email', email);
-            params.append('phone', phone);
+            url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
         } else {
             alert('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             form.classList.remove('loading');
             return;
         }
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url + '?' + params.toString(), true);
-        
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    console.log('✅ استجابة الخادم:', response);
+        // إنشاء عنصر script جديد
+        const script = document.createElement('script');
+        const callbackName = 'jsonpCallback_' + Date.now();
 
-                    if (response.success) {
-                        console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                        localStorage.setItem('userData', JSON.stringify(response.data));
-                        localStorage.setItem('userEmail', response.data.email);
-                        localStorage.setItem('userPhone', response.data.phone);
-                        console.log('💾 تم حفظ البيانات، جاري التحويل...');
-                        window.location.href = 'profile.html';
-                    } else {
-                        alert(response.message || 'لم يتم العثور على المستخدم');
-                    }
-                } catch (error) {
-                    console.error('⚠️ خطأ في تحليل البيانات:', error);
-                    alert('حدث خطأ في معالجة البيانات');
-                }
+        // تعريف دالة callback
+        window[callbackName] = function(response) {
+            console.log('✅ استجابة الخادم:', response);
+            
+            if (response.success) {
+                console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
+                localStorage.setItem('userData', JSON.stringify(response.data));
+                localStorage.setItem('userEmail', response.data.email);
+                localStorage.setItem('userPhone', response.data.phone);
+                console.log('💾 تم حفظ البيانات، جاري التحويل...');
+                window.location.href = 'profile.html';
             } else {
-                console.error('⚠️ خطأ في الاتصال:', xhr.status);
-                alert('حدث خطأ في الاتصال بالخادم');
+                alert(response.message || 'لم يتم العثور على المستخدم');
             }
+
+            // تنظيف
+            document.body.removeChild(script);
+            delete window[callbackName];
             form.classList.remove('loading');
         };
 
-        xhr.onerror = function() {
-            console.error('⚠️ خطأ في الاتصال');
-            alert('حدث خطأ في الاتصال بالخادم');
+        // إضافة callback إلى URL
+        url += `&callback=${callbackName}`;
+        
+        // إعداد script
+        script.src = url;
+        script.onerror = function() {
+            alert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+            document.body.removeChild(script);
+            delete window[callbackName];
             form.classList.remove('loading');
         };
 
-        xhr.timeout = 10000; // 10 seconds timeout
-        xhr.ontimeout = function() {
-            console.error('⚠️ انتهت مهلة الاتصال');
-            alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
-            form.classList.remove('loading');
-        };
+        // إضافة script إلى الصفحة
+        document.body.appendChild(script);
 
-        xhr.send();
+        // معالجة timeout
+        setTimeout(function() {
+            if (window[callbackName]) {
+                alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
+                document.body.removeChild(script);
+                delete window[callbackName];
+                form.classList.remove('loading');
+            }
+        }, 10000);
     });
 });
