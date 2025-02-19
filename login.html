@@ -6,6 +6,7 @@
     <title>تسجيل الدخول - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="login.js" defer></script>
     <style>
         :root {
             --primary-color: #005C97;
@@ -20,8 +21,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
-<script src="login.js"></script>
 
         body {
             background-color: var(--background-color);
@@ -261,14 +260,13 @@
                 const data = await response.json();
                 console.log('Server response:', data);
 
-              if (data && data.success) {
-    console.log('Login successful, storing data...');
-    localStorage.setItem('userData', JSON.stringify(data.data));
-    localStorage.setItem('userEmail', data.data.email);
-    localStorage.setItem('userPhone', data.data.phone);
-    console.log('Data stored, redirecting...');
-    window.location.replace('profile.html');
-}
+                if (data && data.success) {
+                    console.log('Login successful, storing data...');
+                    localStorage.setItem('userData', JSON.stringify(data.data));
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('userPhone', data.data.phone);
+                    console.log('Data stored, redirecting...');
+                    window.location.replace('profile.html');
                 } else {
                     throw new Error(data.message || 'لم يتم العثور على المستخدم');
                 }
