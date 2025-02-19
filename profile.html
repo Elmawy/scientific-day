@@ -388,94 +388,71 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        window.onload = async function() {
-            try {
-                const email = localStorage.getItem('userEmail');
-                const phone = localStorage.getItem('userPhone');
-              
-                if (!email || !phone) {
-                    window.location.href = 'profile.html';
-                    return;
-                }
-
-                const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=verifyUser&email=${email}&phone=${phone}`;
-                const response = await fetch(url);
-                const result = await response.json();
-
-                console.log('البيانات المستلمة:', result);
-
-                if (result.success && result.data) {
-                    const userData = result.data;
-                  
-                    // تحديث البيانات في الصفحة
-                    document.getElementById('userName').textContent = userData.name || '-';
-                    document.getElementById('userEmail').textContent = userData.email || '-';
-                    document.getElementById('userPhone').textContent = userData.phone || '-';
-                    document.getElementById('userGender').textContent = userData.gender || '-';
-                    document.getElementById('userType').textContent = userData.type || '-';
-                    document.getElementById('userCountry').textContent = userData.country || '-';
-                    document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
-
-                    // تحديث localStorage
-                    localStorage.setItem('userData', JSON.stringify(userData));
-
-                    // التحقق من حالة الحضور
-                    if (userData.attendance === "حاضر") {
-                        document.getElementById('attendanceBtn').disabled = true;
-                        document.getElementById('certificateBtn').disabled = false;
-                        document.getElementById('attendanceStatus').style.display = 'block';
-                    }
-                } else {
-                    showToast('❌ خطأ في جلب البيانات', false);
-                }
-            } catch (error) {
-                console.error('خطأ:', error);
-                showToast('❌ حدث خطأ في الاتصال', false);
-            }
-        };
-
-        async function markAttendance() {
-            try {
-                const userData = JSON.parse(localStorage.getItem('userData'));
-                if (!userData) return;
-
-                const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=markAttendance&email=${userData.email}&phone=${userData.phone}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('certificateBtn').disabled = false;
-                    document.getElementById('attendanceStatus').style.display = 'block';
-                    showToast('✅ تم تسجيل حضورك بنجاح!', true);
-                } else {
-                    showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
-                }
-            } catch (error) {
-                console.error('خطأ:', error);
-                showToast('❌ حدث خطأ في الاتصال', false);
-            }
-        }
-
-        function downloadCertificate() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            if (!userData || !userData.certificateLink) {
-                showToast('❌ الشهادة غير متوفرة حالياً', false);
+       window.onload = async function() {
+    try {
+        // محاولة قراءة البيانات من localStorage
+        const userData = localStorage.getItem('userData');
+        
+        if (userData) {
+            // إذا وجدت البيانات، قم بتحليلها وعرضها
+            const parsedData = JSON.parse(userData);
+            updateUI(parsedData);
+        } else {
+            // إذا لم توجد البيانات، حاول جلبها من السيرفر
+            const email = localStorage.getItem('userEmail');
+            const phone = localStorage.getItem('userPhone');
+            
+            if (!email || !phone) {
+                window.location.href = 'login.html';
                 return;
             }
-            window.open(userData.certificateLink, '_blank');
-        }
 
-        function showToast(message, success = true) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.background = success ? '#28a745' : '#dc3545';
-            toast.style.color = 'white';
-            toast.style.display = 'block';
-          
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+            const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=verifyUser&email=${email}&phone=${phone}`;
+            const response = await fetch(url);
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                localStorage.setItem('userData', JSON.stringify(result.data));
+                updateUI(result.data);
+            } else {
+                throw new Error('فشل في جلب البيانات');
+            }
+        }
+    } catch (error) {
+        console.error('خطأ:', error);
+        showToast('❌ حدث خطأ في تحميل البيانات', false);
+    }
+};
+
+function updateUI(userData) {
+    // تحديث عناصر الواجهة بالبيانات
+    document.getElementById('userName').textContent = userData.name || '-';
+    document.getElementById('userEmail').textContent = userData.email || '-';
+    document.getElementById('userPhone').textContent = userData.phone || '-';
+    document.getElementById('userGender').textContent = userData.gender || '-';
+    document.getElementById('userType').textContent = userData.type || '-';
+    document.getElementById('userCountry').textContent = userData.country || '-';
+    document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+
+    // التحقق من حالة الحضور
+    if (userData.attendance === "حاضر") {
+        document.getElementById('attendanceBtn').disabled = true;
+        document.getElementById('certificateBtn').disabled = false;
+        document.getElementById('attendanceStatus').style.display = 'block';
+    }
+}
+
+function showToast(message, success = true) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.background = success ? '#28a745' : '#dc3545';
+    toast.style.color = 'white';
+    toast.style.display = 'block';
+    
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+
         }
 
         function logout() {
