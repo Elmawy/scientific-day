@@ -261,12 +261,14 @@
                 const data = await response.json();
                 console.log('Server response:', data);
 
-                if (data && data.success) {
-                    console.log('Login successful, storing data...');
-                    // تخزين البيانات كاملة في كائن واحد
-                    localStorage.setItem('userData', JSON.stringify(data.data));
-                    console.log('Data stored, redirecting...');
-                    window.location.href = './profile.html';
+               if (data && data.success) {
+    console.log('Login successful, storing data...');
+    localStorage.setItem('userData', JSON.stringify(data.data));
+    localStorage.setItem('userEmail', data.data.email);
+    localStorage.setItem('userPhone', data.data.phone);
+    console.log('Data stored, redirecting...');
+    window.location.replace('profile.html');
+}
                 } else {
                     throw new Error(data.message || 'لم يتم العثور على المستخدم');
                 }
