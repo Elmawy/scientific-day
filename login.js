@@ -22,7 +22,7 @@ window.switchLoginMethod = function(method) {
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
         const form = this;
@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             console.log('🔄 محاولة تسجيل الدخول...');
-            const baseUrl = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
             
-            let url = `${baseUrl}?action=verifyUser`;
+            // إنشاء URL مع المعلمات
+            let url = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec?action=verifyUser';
+            
             if (attendanceCode) {
                 url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
             } else if (email && phone) {
@@ -45,75 +46,68 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             }
 
-            // إنشاء عنصر iframe مؤقت
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
+            // إضافة معلمة callback
+            const callbackName = 'jsonpCallback_' + Date.now();
+            url += `&callback=${callbackName}`;
 
-            // إنشاء نموذج وإرساله داخل الـ iframe
-            const tempForm = document.createElement('form');
-            tempForm.method = 'POST';
-            tempForm.action = url;
-            tempForm.target = '_blank';
+            // إنشاء عنصر script
+            const script = document.createElement('script');
+            script.src = url;
 
-            // إضافة حقول النموذج
-            if (attendanceCode) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'attendanceCode';
-                input.value = attendanceCode;
-                tempForm.appendChild(input);
-            } else {
-                const emailInput = document.createElement('input');
-                emailInput.type = 'hidden';
-                emailInput.name = 'email';
-                emailInput.value = email;
-                tempForm.appendChild(emailInput);
+            // إنشاء promise للتعامل مع الاستجابة
+            const responsePromise = new Promise((resolve, reject) => {
+                // تعريف دالة callback
+                window[callbackName] = function(response) {
+                    resolve(response);
+                    cleanup();
+                };
 
-                const phoneInput = document.createElement('input');
-                phoneInput.type = 'hidden';
-                phoneInput.name = 'phone';
-                phoneInput.value = phone;
-                tempForm.appendChild(phoneInput);
-            }
+                // معالجة الأخطاء
+                script.onerror = () => {
+                    reject(new Error('فشل في الاتصال بالخادم'));
+                    cleanup();
+                };
 
-            iframe.contentDocument.body.appendChild(tempForm);
-            tempForm.submit();
+                // دالة التنظيف
+                function cleanup() {
+                    document.head.removeChild(script);
+                    delete window[callbackName];
+                }
 
-            // إنشاء Promise للانتظار للرد
-            const response = await new Promise((resolve, reject) => {
-                window.addEventListener('message', function(event) {
-                    if (event.origin === 'https://script.google.com') {
-                        resolve(event.data);
-                    }
-                }, false);
-
-                // timeout بعد 10 ثواني
+                // تحديد مهلة زمنية
                 setTimeout(() => {
                     reject(new Error('انتهت مهلة الاتصال'));
+                    cleanup();
                 }, 10000);
             });
 
-            // تنظيف
-            document.body.removeChild(iframe);
+            // إضافة script إلى الصفحة
+            document.head.appendChild(script);
 
-            const data = JSON.parse(response);
-            console.log('✅ استجابة الخادم:', data);
+            // انتظار الاستجابة
+            responsePromise.then(data => {
+                console.log('✅ استجابة الخادم:', data);
 
-            if (data && data.success) {
-                console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                localStorage.setItem('userData', JSON.stringify(data.data));
-                localStorage.setItem('userEmail', data.data.email);
-                localStorage.setItem('userPhone', data.data.phone);
-                console.log('💾 تم حفظ البيانات، جاري التحويل...');
-                window.location.href = 'profile.html';
-            } else {
-                throw new Error(data.message || 'لم يتم العثور على المستخدم');
-            }
+                if (data && data.success) {
+                    console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
+                    localStorage.setItem('userData', JSON.stringify(data.data));
+                    localStorage.setItem('userEmail', data.data.email);
+                    localStorage.setItem('userPhone', data.data.phone);
+                    console.log('💾 تم حفظ البيانات، جاري التحويل...');
+                    window.location.href = 'profile.html';
+                } else {
+                    throw new Error(data.message || 'لم يتم العثور على المستخدم');
+                }
+            }).catch(error => {
+                console.error('⚠️ خطأ:', error);
+                alert(`❌ حدث خطأ: ${error.message}`);
+            }).finally(() => {
+                form.classList.remove('loading');
+            });
+
         } catch (error) {
             console.error('⚠️ خطأ:', error);
             alert(`❌ حدث خطأ: ${error.message}`);
-        } finally {
             form.classList.remove('loading');
         }
     });
