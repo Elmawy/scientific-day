@@ -261,7 +261,7 @@
             <script>
     window.onload = async function() {
         console.log('🔍 تحميل بيانات المستخدم...');
-        
+      
         const userDataString = localStorage.getItem('userData');
         if (!userDataString) {
             console.log('📡 محاولة جلب البيانات من Google Sheets...');
@@ -325,7 +325,7 @@
     <header class="header">
         <button class="logout-btn" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i>
-            تسجيل الخروج
+            تسجيل الخروج  تسجيل الخروج
         </button>
         <div class="logo-container">
             <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
@@ -389,114 +389,74 @@
 
     <script>
         window.onload = function() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-
-            if (!userData || !userData.email) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
-
-            if (localStorage.getItem('attendanceStatus') === 'true') {
-                document.getElementById('attendanceBtn').disabled = true;
-                document.getElementById('certificateBtn').disabled = false;
-                document.getElementById('attendanceStatus').style.display = 'block';
-            }
-        };
-
-        async function markAttendance() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-
-            if (!userData || !userData.email || !userData.phone) {
-                showToast('⚠️ يرجى التأكد من تسجيل الدخول أولًا.', false);
-                return;
-            }
-
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
-                url.searchParams.append('action', 'markAttendance');
-                url.searchParams.append('email', userData.email);
-                url.searchParams.append('phone', userData.phone);
-
-                const response = await fetch(url, { method: "GET" });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('attendanceStatus', 'true');
+            // محاولة جلب البيانات من localStorage
+            const userDataString = localStorage.getItem('userData');
+            if (userDataString) {
+                const userData = JSON.parse(userDataString);
+              
+                // تحميل البيانات إلى العناصر
+                document.getElementById('userName').textContent = userData.name || '-';
+                document.getElementById('userEmail').textContent = userData.email || '-';
+                document.getElementById('userPhone').textContent = userData.phone || '-';
+                document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+              
+                // التحقق من حالة الحضور
+                if (userData.attendance === "حاضر") {
                     document.getElementById('attendanceBtn').disabled = true;
                     document.getElementById('certificateBtn').disabled = false;
                     document.getElementById('attendanceStatus').style.display = 'block';
-                    showToast('✅ تم تسجيل حضورك بنجاح!', true);
-                } else {
-                    showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
                 }
-            } catch (error) {
-                console.error('⚠️ خطأ:', error);
-                showToast('❌ حدث خطأ أثناء تسجيل الحضور', false);
+            } else {
+                // إذا لم تكن هناك بيانات، العودة إلى صفحة تسجيل الدخول
+                window.location.href = 'index.html';
             }
+        };
+
+        function markAttendance() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) return;
+
+            const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=markAttendance&email=${userData.email}&phone=${userData.phone}`;
+          
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('attendanceBtn').disabled = true;
+                        document.getElementById('certificateBtn').disabled = false;
+                        document.getElementById('attendanceStatus').style.display = 'block';
+                        showToast('✅ تم تسجيل حضورك بنجاح!', true);
+                    } else {
+                        showToast('❌ ' + (data.message || 'حدث خطأ في تسجيل الحضور'), false);
+                    }
+                })
+                .catch(error => {
+                    showToast('❌ حدث خطأ في الاتصال', false);
+                });
         }
 
-        async function downloadCertificate() {
+        function downloadCertificate() {
             const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) return;
 
-            if (!userData || !userData.email || !userData.phone) {
-                showToast('⚠️ يرجى التأكد من تسجيل الدخول أولًا.', false);
-                return;
-            }
-
-            try {
-                const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
-                url.searchParams.append('action', 'verifyUser');
-                url.searchParams.append('email', userData.email);
-                url.searchParams.append('phone', userData.phone);
-
-                const response = await fetch(url, { method: "GET" });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.success && data.data.certificateLink) {
-                    window.open(data.data.certificateLink, '_blank');
-                } else {
-                    showToast(data.message || '❌ لم يتم العثور على الشهادة', false);
-                }
-            } catch (error) {
-                console.error('⚠️ خطأ:', error);
-                showToast('❌ حدث خطأ أثناء تحميل الشهادة', false);
+            if (userData.certificateLink) {
+                window.open(userData.certificateLink, '_blank');
+            } else {
+                showToast('❌ الشهادة غير متوفرة حالياً', false);
             }
         }
 
         function showToast(message, success = true) {
             const toast = document.getElementById('toast');
-            
-            if (!toast) {
-                console.error("❌ عنصر `#toast` غير موجود في HTML.");
-                return;
-            }
-
             toast.textContent = message;
-            toast.style.background = success ? 'green' : 'red';
+            toast.style.background = success ? '#28a745' : '#dc3545';
             toast.style.color = 'white';
-            toast.style.padding = '10px 15px';
-            toast.style.borderRadius = '5px';
-            toast.style.position = 'fixed';
-            toast.style.bottom = '20px';
-            toast.style.right = '20px';
             toast.style.display = 'block';
-            
+          
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 3000);
-          };
+        }
 
         function logout() {
             localStorage.clear();
