@@ -1,5 +1,5 @@
 // ثوابت
-const API_URL = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzozrAQyea0sZSCEFzc4ARCZiv0kht4LigkMC2cl4_th-ibNBPqBieLLNBPbRWeWOTo/exec';
 let currentLoginMethod = 'code';
 
 // وظيفة تبديل طريقة تسجيل الدخول
