@@ -22,7 +22,7 @@ window.switchLoginMethod = function(method) {
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const form = this;
@@ -32,66 +32,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
 
-        console.log('🔄 محاولة تسجيل الدخول...');
-
-        // إنشاء URL مع المعلمات
-        let url = 'https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec?action=verifyUser';
-        
-        if (attendanceCode) {
-            url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
-        } else if (email && phone) {
-            url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
-        } else {
-            alert('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
-            form.classList.remove('loading');
-            return;
-        }
-
-        // تنفيذ الطلب باستخدام JSONP
-        const callbackName = 'callback_' + Math.random().toString(36).substr(2, 9);
-        let scriptElement = null;
-
-        const cleanup = () => {
-            if (scriptElement && scriptElement.parentNode) {
-                scriptElement.parentNode.removeChild(scriptElement);
+        try {
+            console.log('🔄 محاولة تسجيل الدخول...');
+            
+            let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec?action=verifyUser';
+            
+            if (attendanceCode) {
+                url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
+            } else if (email && phone) {
+                url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+            } else {
+                throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             }
-            delete window[callbackName];
-        };
 
-        const timeoutId = setTimeout(() => {
-            cleanup();
-            form.classList.remove('loading');
-            alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
-        }, 10000);
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            console.log('✅ استجابة الخادم:', data);
 
-        window[callbackName] = function(response) {
-            clearTimeout(timeoutId);
-            cleanup();
-            form.classList.remove('loading');
-
-            console.log('✅ استجابة الخادم:', response);
-
-            if (response.success) {
+            if (data.success) {
                 console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                localStorage.setItem('userData', JSON.stringify(response.data));
-                localStorage.setItem('userEmail', response.data.email);
-                localStorage.setItem('userPhone', response.data.phone);
+                localStorage.setItem('userData', JSON.stringify(data.data));
+                localStorage.setItem('userEmail', data.data.email);
+                localStorage.setItem('userPhone', data.data.phone);
                 console.log('💾 تم حفظ البيانات، جاري التحويل...');
                 window.location.href = 'profile.html';
             } else {
-                alert(response.message || 'حدث خطأ غير معروف');
+                throw new Error(data.message || 'لم يتم العثور على المستخدم');
             }
-        };
-
-        // إنشاء وإضافة عنصر السكريبت
-        scriptElement = document.createElement('script');
-        scriptElement.src = `${url}&callback=${callbackName}`;
-        scriptElement.onerror = function() {
-            clearTimeout(timeoutId);
-            cleanup();
+        } catch (error) {
+            console.error('⚠️ خطأ:', error);
+            alert(`❌ حدث خطأ: ${error.message}`);
+        } finally {
             form.classList.remove('loading');
-            alert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
-        };
-        document.head.appendChild(scriptElement);
+        }
     });
 });
