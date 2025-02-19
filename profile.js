@@ -22,7 +22,7 @@ async function fetchUserDataFromGoogleSheets() {
     }
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec');
         url.searchParams.append('action', 'verifyUser');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
@@ -67,7 +67,7 @@ async function markAttendance() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec');
         url.searchParams.append('action', 'markAttendance');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
@@ -95,7 +95,7 @@ async function downloadCertificate() {
     const phone = localStorage.getItem('userPhone');
 
     try {
-        const url = new URL('https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec');
+        const url = new URL('https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec');
         url.searchParams.append('action', 'getCertificate');
         url.searchParams.append('email', email);
         url.searchParams.append('phone', phone);
