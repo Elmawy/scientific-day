@@ -1,6 +1,10 @@
+// ثوابت
+const API_URL = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec';
+let currentLoginMethod = 'code';
 
 // وظيفة تبديل طريقة تسجيل الدخول
 function switchLoginMethod(method) {
+    currentLoginMethod = method;
     const codeLogin = document.getElementById('codeLogin');
     const credentialsLogin = document.getElementById('credentialsLogin');
     const options = document.querySelectorAll('.login-option');
@@ -21,73 +25,121 @@ function switchLoginMethod(method) {
     }
 }
 
-// دالة JSONP للتواصل مع Google Apps Script
-function fetchJsonp(params) {
+// دالة للتحقق من صحة المدخلات
+function validateInputs(params) {
+    if (currentLoginMethod === 'code') {
+        if (!params.attendanceCode) {
+            throw new Error('الرجاء إدخال رمز الحضور');
+        }
+    } else {
+        if (!params.email) {
+            throw new Error('الرجاء إدخال البريد الإلكتروني');
+        }
+        if (!params.phone) {
+            throw new Error('الرجاء إدخال رقم الجوال');
+        }
+    }
+    return true;
+}
+
+// دالة الاتصال بالخادم
+function fetchData(params) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         const callbackName = 'jsonpCallback_' + Date.now();
         
-        window[callbackName] = function(data) {
-            delete window[callbackName];
-            document.body.removeChild(script);
-            resolve(data);
+        // تعريف دالة callback
+        window[callbackName] = function(response) {
+            cleanup();
+            resolve(response);
         };
 
-        const url = new URL('https://script.google.com/macros/s/AKfycbzozrAQyea0sZSCEFzc4ARCZiv0kht4LigkMC2cl4_th-ibNBPqBieLLNBPbRWeWOTo/exec');
+        // دالة تنظيف
+        const cleanup = () => {
+            delete window[callbackName];
+            document.body.removeChild(script);
+        };
+
+        // إعداد URL
+        const url = new URL(API_URL);
         url.searchParams.append('callback', callbackName);
         Object.entries(params).forEach(([key, value]) => {
             url.searchParams.append(key, value);
         });
 
+        // إعداد script tag
         script.src = url.toString();
-        script.onerror = () => reject(new Error('فشل في الاتصال بالخادم'));
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('فشل في الاتصال بالخادم'));
+        };
+        
+        // إضافة timeout
+        const timeout = setTimeout(() => {
+            cleanup();
+            reject(new Error('انتهت مهلة الاتصال'));
+        }, 10000);
+
+        // إضافة script للصفحة
         document.body.appendChild(script);
     });
 }
 
-// إضافة مستمع الحدث عند تحميل الصفحة
+// عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('loginForm');
     
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        console.log('🔄 محاولة تسجيل الدخول...');
         
         const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'جاري التحقق...';
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
 
         try {
+            // إخفاء رسائل الخطأ السابقة
+            errorMessage.style.display = 'none';
+            
+            // إظهار حالة التحميل
+            submitButton.disabled = true;
+            loadingMessage.style.display = 'block';
+            loadingMessage.textContent = 'جاري التحقق...';
+
+            // إعداد البيانات
             const params = {
                 action: 'verifyUser'
             };
 
-            // التحقق من طريقة تسجيل الدخول
-            const codeLogin = document.getElementById('codeLogin');
-            if (codeLogin.style.display !== 'none') {
+            if (currentLoginMethod === 'code') {
                 params.attendanceCode = document.getElementById('attendanceCode').value.trim();
             } else {
                 params.email = document.getElementById('email').value.trim();
                 params.phone = document.getElementById('phone').value.trim();
             }
 
-            const data = await fetchJsonp(params);
-            console.log('✅ استجابة الخادم:', data);
+            // التحقق من المدخلات
+            validateInputs(params);
 
-            if (data.success) {
-                localStorage.setItem('userData', JSON.stringify(data.data));
-                localStorage.setItem('userEmail', data.data.email);
-                localStorage.setItem('userPhone', data.data.phone);
+            // إرسال الطلب
+            const response = await fetchData(params);
+
+            if (response.success) {
+                // تخزين بيانات المستخدم
+                localStorage.setItem('userData', JSON.stringify(response.data));
                 window.location.href = 'profile.html';
             } else {
-                throw new Error(data.message || 'فشل في تسجيل الدخول');
+                throw new Error(response.message || 'فشل في تسجيل الدخول');
             }
+
         } catch (error) {
+            // إظهار رسالة الخطأ
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = 'block';
             console.error('⚠️ خطأ:', error);
-            alert('❌ ' + error.message);
         } finally {
+            // إعادة تفعيل الزر وإخفاء رسالة التحميل
             submitButton.disabled = false;
-            submitButton.textContent = 'دخول';
+            loadingMessage.style.display = 'none';
         }
     });
 });
