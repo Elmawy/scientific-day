@@ -1,5 +1,5 @@
-// وظيفة تبديل طريقة تسجيل الدخول
-function switchLoginMethod(method) {
+// جعل الدالة متاحة عالمياً
+window.switchLoginMethod = function(method) {
     const codeLogin = document.getElementById('codeLogin');
     const credentialsLogin = document.getElementById('credentialsLogin');
     const options = document.querySelectorAll('.login-option');
@@ -22,7 +22,9 @@ function switchLoginMethod(method) {
 
 // إضافة مستمع الحدث عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    const loginForm = document.getElementById('loginForm');
+    
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const form = this;
@@ -68,18 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('userEmail', data.data.email);
                 localStorage.setItem('userPhone', data.data.phone);
                 console.log('💾 تم حفظ البيانات، جاري التحويل...');
-                
-                // محاولة التحويل مع التحقق من وجود الصفحة
-                try {
-                    const profilePage = await fetch('profile.html');
-                    if (profilePage.ok) {
-                        window.location.href = 'profile.html';
-                    } else {
-                        throw new Error('صفحة الملف الشخصي غير موجودة');
-                    }
-                } catch (error) {
-                    throw new Error('لا يمكن الوصول إلى صفحة الملف الشخصي');
-                }
+                window.location.href = 'profile.html';
             } else {
                 throw new Error(data.message || 'لم يتم العثور على المستخدم');
             }
