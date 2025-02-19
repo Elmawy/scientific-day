@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('🔄 محاولة تسجيل الدخول...');
             const baseUrl = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
             
-            // بناء URL مع المعلمات
             let url = `${baseUrl}?action=verifyUser`;
             if (attendanceCode) {
                 url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
@@ -46,27 +45,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             }
 
-            // استخدام JSONP لتجاوز قيود CORS
-            const callbackName = 'jsonpCallback_' + Math.random().toString(36).substr(2, 9);
-            
-            const promise = new Promise((resolve, reject) => {
-                window[callbackName] = function(response) {
-                    resolve(response);
-                    document.head.removeChild(script);
-                    delete window[callbackName];
-                };
+            // إنشاء عنصر iframe مؤقت
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
 
-                const script = document.createElement('script');
-                script.src = `${url}&callback=${callbackName}`;
-                script.onerror = () => {
-                    reject(new Error('فشل في الاتصال بالخادم'));
-                    document.head.removeChild(script);
-                    delete window[callbackName];
-                };
-                document.head.appendChild(script);
+            // إنشاء نموذج وإرساله داخل الـ iframe
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = url;
+            tempForm.target = '_blank';
+
+            // إضافة حقول النموذج
+            if (attendanceCode) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'attendanceCode';
+                input.value = attendanceCode;
+                tempForm.appendChild(input);
+            } else {
+                const emailInput = document.createElement('input');
+                emailInput.type = 'hidden';
+                emailInput.name = 'email';
+                emailInput.value = email;
+                tempForm.appendChild(emailInput);
+
+                const phoneInput = document.createElement('input');
+                phoneInput.type = 'hidden';
+                phoneInput.name = 'phone';
+                phoneInput.value = phone;
+                tempForm.appendChild(phoneInput);
+            }
+
+            iframe.contentDocument.body.appendChild(tempForm);
+            tempForm.submit();
+
+            // إنشاء Promise للانتظار للرد
+            const response = await new Promise((resolve, reject) => {
+                window.addEventListener('message', function(event) {
+                    if (event.origin === 'https://script.google.com') {
+                        resolve(event.data);
+                    }
+                }, false);
+
+                // timeout بعد 10 ثواني
+                setTimeout(() => {
+                    reject(new Error('انتهت مهلة الاتصال'));
+                }, 10000);
             });
 
-            const data = await promise;
+            // تنظيف
+            document.body.removeChild(iframe);
+
+            const data = JSON.parse(response);
             console.log('✅ استجابة الخادم:', data);
 
             if (data && data.success) {
