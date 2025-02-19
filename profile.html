@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - اليوم العلمي</title>
+    <title>البيانات الشخصية - اليوم العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -13,6 +13,8 @@
             --accent-color: #00BCD4;
             --text-color: #2C3E50;
             --background-color: #F5F7FA;
+            --success-color: #28a745;
+            --error-color: #dc3545;
         }
 
         * {
@@ -20,263 +22,392 @@
             padding: 0;
             box-sizing: border-box;
         }
-      
-<script src="login.js"></script>
 
         body {
             background-color: var(--background-color);
             font-family: 'Tajawal', sans-serif;
             color: var(--text-color);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNGMEYyRjQiPjwvcmVjdD4KPC9zdmc+');
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
         }
 
-        .logos {
+        .logo-container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
-            margin: 20px 0;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .logo {
-            max-width: 150px;
-            height: auto;
+            height: 60px;
+            object-fit: contain;
             transition: transform 0.3s ease;
         }
 
-        .login-form {
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-card {
             background: white;
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-
-        .login-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
-            border-radius: 0 15px 15px 0;
-        }
-
-        .login-form h2 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-        }
-
-        .login-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
         }
 
-        .login-option {
-            padding: 10px 20px;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            cursor: pointer;
+        .welcome-banner {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(0,92,151,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(0,92,151,0.1);
             transition: all 0.3s ease;
         }
 
-        .login-option.active {
+        .info-group:hover {
+            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
+            transform: translateY(-2px);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+            margin-left: 10px;
+        }
+
+        .button {
             background: var(--primary-color);
             color: white;
-            border-color: var(--primary-color);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-color);
-            font-weight: bold;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Tajawal', sans-serif;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 12px 30px;
             border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            padding: 12px 25px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 92, 151, 0.2);
+        .button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button i {
+            font-size: 18px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .attendance-status {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #e8f5e9;
+            color: var(--success-color);
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .login-form {
-                padding: 20px;
-                margin: 10px;
-            }
-
-            .logo {
-                max-width: 120px;
+            .container { padding: 10px; }
+            .profile-card { padding: 20px; }
+            .logo { height: 40px; }
+            .button-group { flex-direction: column; }
+            .button { width: 100%; justify-content: center; }
+            .logout-btn {
+                position: static;
+                margin: 10px auto;
+                width: fit-content;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logos">
+    <header class="header">
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            تسجيل الخروج
+        </button>
+        <div class="logo-container">
             <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
             <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
         </div>
+    </header>
 
-        <div class="login-form">
-            <h2>تسجيل الدخول لليوم العلمي</h2>
-
-            <div class="login-options">
-                <div class="login-option active" onclick="switchLoginMethod('code')">الدخول برمز الحضور</div>
-                <div class="login-option" onclick="switchLoginMethod('credentials')">الدخول بالبيانات</div>
+    <div class="container">
+        <div class="profile-card">
+            <div class="welcome-banner">
+                <h2><i class="fas fa-user-circle"></i> حياك الله <span id="welcomeName">-</span></h2>
+                <p>سعدنا بوجودك معنا في اليوم العلمي</p>
             </div>
 
-            <form id="loginForm">
-                <div id="codeLogin">
-                    <div class="form-group">
-                        <label for="attendanceCode">رمز الحضور:</label>
-                        <input type="text" id="attendanceCode" placeholder="أدخل رمز الحضور">
-                    </div>
+            <div class="info-group">
+                <h3><i class="fas fa-info-circle"></i> معلومات المستخدم</h3>
+                <div class="info-item">
+                    <span><i class="fas fa-user"></i> الاسم:</span>
+                    <span id="userName">-</span>
                 </div>
-
-                <div id="credentialsLogin" style="display: none;">
-                    <div class="form-group">
-                        <label for="email">البريد الإلكتروني:</label>
-                        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">رقم الجوال:</label>
-                        <input type="tel" id="phone" placeholder="أدخل رقم الجوال">
-                    </div>
+                <div class="info-item">
+                    <span><i class="fas fa-envelope"></i> البريد الإلكتروني:</span>
+                    <span id="userEmail">-</span>
                 </div>
+                <div class="info-item">
+                    <span><i class="fas fa-phone"></i> رقم الجوال:</span>
+                    <span id="userPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-venus-mars"></i> الجنس:</span>
+                    <span id="userGender">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-user-tag"></i> نوع المشاركة:</span>
+                    <span id="userType">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-globe"></i> الدولة:</span>
+                    <span id="userCountry">-</span>
+                </div>
+            </div>
 
-                <button type="submit">دخول</button>
-            </form>
+            <div id="attendanceStatus" class="attendance-status">
+                <i class="fas fa-check-circle"></i> تم تسجيل حضورك بنجاح!
+            </div>
+
+            <div class="button-group">
+                <button id="attendanceBtn" class="button" onclick="markAttendance()">
+                    <i class="fas fa-clipboard-check"></i>
+                    تسجيل الحضور
+                </button>
+                <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>
+                    <i class="fas fa-certificate"></i>
+                    تحميل الشهادة
+                </button>
+            </div>
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
-        function switchLoginMethod(method) {
-            const codeLogin = document.getElementById('codeLogin');
-            const credentialsLogin = document.getElementById('credentialsLogin');
-            const options = document.querySelectorAll('.login-option');
-
-            options.forEach(option => option.classList.remove('active'));
-
-            if (method === 'code') {
-                codeLogin.style.display = 'block';
-                credentialsLogin.style.display = 'none';
-                options[0].classList.add('active');
-                document.getElementById('email').value = '';
-                document.getElementById('phone').value = '';
+        window.onload = async function() {
+            console.log('🔍 تحميل بيانات المستخدم...');
+            const userDataString = localStorage.getItem('userData');
+            
+            if (!userDataString) {
+                console.log('📡 محاولة جلب البيانات من Google Sheets...');
+                await fetchUserDataFromGoogleSheets();
             } else {
-                codeLogin.style.display = 'none';
-                credentialsLogin.style.display = 'block';
-                options[1].classList.add('active');
-                document.getElementById('attendanceCode').value = '';
+                const userData = JSON.parse(userDataString);
+                loadUserData(userData);
+                
+                if (userData.attendance === "حاضر") {
+                    document.getElementById('attendanceBtn').disabled = true;
+                    document.getElementById('certificateBtn').disabled = false;
+                    document.getElementById('attendanceStatus').style.display = 'block';
+                }
+            }
+        };
+
+        function loadUserData(userData) {
+            console.log('✅ تحميل بيانات المستخدم إلى الصفحة...', userData);
+            setElementText('userName', userData.name);
+            setElementText('userEmail', userData.email);
+            setElementText('userPhone', userData.phone);
+            setElementText('userGender', userData.gender);
+            setElementText('userType', userData.type);
+            setElementText('userCountry', userData.country);
+            setElementText('welcomeName', userData.name?.split(' ')[0] || 'زائرنا الكريم');
+        }
+
+        function setElementText(id, text) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = text || 'غير متوفر';
+            } else {
+                console.error(`❌ العنصر #${id} غير موجود في HTML`);
             }
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        async function fetchUserDataFromGoogleSheets() {
+            const email = localStorage.getItem('userEmail');
+            const phone = localStorage.getItem('userPhone');
 
-            const form = this;
-            form.classList.add('loading');
-
-            const attendanceCode = document.getElementById('attendanceCode').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
+            if (!email || !phone) {
+                console.warn('⚠️ بيانات تسجيل الدخول غير متوفرة، إعادة التوجيه...');
+                window.location.href = 'index.html';
+                return;
+            }
 
             try {
-                console.log('Attempting login...');
-                const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
-                url.searchParams.append('action', 'verifyUser');
-
-                if (attendanceCode) {
-                    url.searchParams.append('attendanceCode', attendanceCode);
-                } else if (email && phone) {
-                    url.searchParams.append('email', email);
-                    url.searchParams.append('phone', phone);
-                } else {
-                    throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
-                }
-
+                const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=verifyUser&email=${email}&phone=${phone}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log('Server response:', data);
 
-                if (data && data.success) {
-                    console.log('Login successful, storing data...');
-                    // تخزين البيانات كاملة في كائن واحد
+                if (data.success) {
+                    console.log('✅ بيانات المستخدم:', data.data);
                     localStorage.setItem('userData', JSON.stringify(data.data));
-                    console.log('Data stored, redirecting...');
-                    window.location.href = './profile.html';
+                    loadUserData(data.data);
                 } else {
-                    throw new Error(data.message || 'لم يتم العثور على المستخدم');
+                    console.error('❌ خطأ في جلب البيانات:', data.message);
+                    showToast('❌ ' + data.message, false);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert(error.message);
-            } finally {
-                form.classList.remove('loading');
+                console.error('❌ خطأ في الاتصال:', error);
+                showToast('❌ حدث خطأ في الاتصال', false);
             }
-        });
+        }
+
+        function markAttendance() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) return;
+
+            const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=markAttendance&email=${userData.email}&phone=${userData.phone}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('attendanceBtn').disabled = true;
+                        document.getElementById('certificateBtn').disabled = false;
+                        document.getElementById('attendanceStatus').style.display = 'block';
+                        showToast('✅ تم تسجيل حضورك بنجاح!', true);
+                    } else {
+                        showToast('❌ ' + (data.message || 'حدث خطأ في تسجيل الحضور'), false);
+                    }
+                })
+                .catch(error => {
+                    showToast('❌ حدث خطأ في الاتصال', false);
+                });
+        }
+
+        function downloadCertificate() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) return;
+
+            if (userData.certificateLink) {
+                window.open(userData.certificateLink, '_blank');
+            } else {
+                showToast('❌ الشهادة غير متوفرة حالياً', false);
+            }
+        }
+
+        function showToast(message, success = true) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = success ? '#28a745' : '#dc3545';
+            toast.style.color = 'white';
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 </html>
