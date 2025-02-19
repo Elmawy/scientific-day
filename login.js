@@ -22,7 +22,7 @@ window.switchLoginMethod = function(method) {
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
         const form = this;
@@ -32,55 +32,68 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
 
-        try {
-            console.log('🔄 محاولة تسجيل الدخول...');
-            
-            let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec';
-            
-            const params = new URLSearchParams({
-                action: 'verifyUser'
-            });
+        console.log('🔄 محاولة تسجيل الدخول...');
 
-            if (attendanceCode) {
-                params.append('attendanceCode', attendanceCode);
-            } else if (email && phone) {
-                params.append('email', email);
-                params.append('phone', phone);
-            } else {
-                throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
-            }
+        let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec';
+        
+        const params = new URLSearchParams({
+            action: 'verifyUser'
+        });
 
-            // استخدام CORS Proxy
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const response = await fetch(proxyUrl + url + '?' + params.toString(), {
-                method: 'GET',
-                headers: {
-                    'Origin': window.location.origin
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('فشل الاتصال بالخادم');
-            }
-
-            const data = await response.json();
-            console.log('✅ استجابة الخادم:', data);
-
-            if (data.success) {
-                console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                localStorage.setItem('userData', JSON.stringify(data.data));
-                localStorage.setItem('userEmail', data.data.email);
-                localStorage.setItem('userPhone', data.data.phone);
-                console.log('💾 تم حفظ البيانات، جاري التحويل...');
-                window.location.href = 'profile.html';
-            } else {
-                throw new Error(data.message || 'لم يتم العثور على المستخدم');
-            }
-        } catch (error) {
-            console.error('⚠️ خطأ:', error);
-            alert(error.message);
-        } finally {
+        if (attendanceCode) {
+            params.append('attendanceCode', attendanceCode);
+        } else if (email && phone) {
+            params.append('email', email);
+            params.append('phone', phone);
+        } else {
+            alert('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             form.classList.remove('loading');
+            return;
         }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url + '?' + params.toString(), true);
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log('✅ استجابة الخادم:', response);
+
+                    if (response.success) {
+                        console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
+                        localStorage.setItem('userData', JSON.stringify(response.data));
+                        localStorage.setItem('userEmail', response.data.email);
+                        localStorage.setItem('userPhone', response.data.phone);
+                        console.log('💾 تم حفظ البيانات، جاري التحويل...');
+                        window.location.href = 'profile.html';
+                    } else {
+                        alert(response.message || 'لم يتم العثور على المستخدم');
+                    }
+                } catch (error) {
+                    console.error('⚠️ خطأ في تحليل البيانات:', error);
+                    alert('حدث خطأ في معالجة البيانات');
+                }
+            } else {
+                console.error('⚠️ خطأ في الاتصال:', xhr.status);
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+            form.classList.remove('loading');
+        };
+
+        xhr.onerror = function() {
+            console.error('⚠️ خطأ في الاتصال');
+            alert('حدث خطأ في الاتصال بالخادم');
+            form.classList.remove('loading');
+        };
+
+        xhr.timeout = 10000; // 10 seconds timeout
+        xhr.ontimeout = function() {
+            console.error('⚠️ انتهت مهلة الاتصال');
+            alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
+            form.classList.remove('loading');
+        };
+
+        xhr.send();
     });
 });
