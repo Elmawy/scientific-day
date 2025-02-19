@@ -221,6 +221,29 @@
                 width: fit-content;
             }
         }
+
+        .attendance-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .attendance-badge.present {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .attendance-badge.absent {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .info-group h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -258,6 +281,30 @@
                 </div>
             </div>
 
+            <div class="info-group">
+                <h3><i class="fas fa-info-circle"></i> معلومات إضافية</h3>
+                <div class="info-item">
+                    <span><i class="fas fa-user-circle"></i> الجنس:</span>
+                    <span id="userGender">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-user-tag"></i> نوع المشاركة:</span>
+                    <span id="userType">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-globe"></i> الدولة:</span>
+                    <span id="userCountry">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-qrcode"></i> رمز الحضور:</span>
+                    <span id="userCode">-</span>
+                </div>
+                <div class="info-item">
+                    <span><i class="fas fa-clipboard-check"></i> حالة الحضور:</span>
+                    <span id="userAttendance" class="attendance-badge">-</span>
+                </div>
+            </div>
+
             <div id="attendanceStatus" class="attendance-status">
                 <i class="fas fa-check-circle"></i> تم تسجيل حضورك بنجاح!
             </div>
@@ -277,125 +324,7 @@
 
     <div id="toast" class="toast"></div>
 
-    <script>
-        window.onload = async function() {
-            console.log('🔍 تحميل بيانات المستخدم...');
-            const userDataString = localStorage.getItem('userData');
-            
-            if (!userDataString) {
-                console.log('📡 محاولة جلب البيانات من Google Sheets...');
-                await fetchUserDataFromGoogleSheets();
-            } else {
-                const userData = JSON.parse(userDataString);
-                loadUserData(userData);
-                
-                if (userData.attendance === "حاضر") {
-                    document.getElementById('attendanceBtn').disabled = true;
-                    document.getElementById('certificateBtn').disabled = false;
-                    document.getElementById('attendanceStatus').style.display = 'block';
-                }
-            }
-        };
-
-        function loadUserData(userData) {
-            console.log('✅ تحميل بيانات المستخدم إلى الصفحة...', userData);
-            setElementText('userName', userData.name);
-            setElementText('userEmail', userData.email);
-            setElementText('userPhone', userData.phone);
-            setElementText('userGender', userData.gender);
-            setElementText('userType', userData.type);
-            setElementText('userCountry', userData.country);
-            setElementText('welcomeName', userData.name?.split(' ')[0] || 'زائرنا الكريم');
-        }
-
-        function setElementText(id, text) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = text || 'غير متوفر';
-            } else {
-                console.error(`❌ العنصر #${id} غير موجود في HTML`);
-            }
-        }
-
-        async function fetchUserDataFromGoogleSheets() {
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
-
-            if (!email || !phone) {
-                console.warn('⚠️ بيانات تسجيل الدخول غير متوفرة، إعادة التوجيه...');
-                window.location.href = 'index.html';
-                return;
-            }
-
-            try {
-                const url = `https://script.google.com/macros/s/AKfycbzozrAQyea0sZSCEFzc4ARCZiv0kht4LigkMC2cl4_th-ibNBPqBieLLNBPbRWeWOTo/exec?action=verifyUser&email=${email}&phone=${phone}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success) {
-                    console.log('✅ بيانات المستخدم:', data.data);
-                    localStorage.setItem('userData', JSON.stringify(data.data));
-                    loadUserData(data.data);
-                } else {
-                    console.error('❌ خطأ في جلب البيانات:', data.message);
-                    showToast('❌ ' + data.message, false);
-                }
-            } catch (error) {
-                console.error('❌ خطأ في الاتصال:', error);
-                showToast('❌ حدث خطأ في الاتصال', false);
-            }
-        }
-
-        function markAttendance() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            if (!userData) return;
-
-            const url = `https://script.google.com/macros/s/AKfycbzozrAQyea0sZSCEFzc4ARCZiv0kht4LigkMC2cl4_th-ibNBPqBieLLNBPbRWeWOTo/exec?action=markAttendance&email=${userData.email}&phone=${userData.phone}`;
-            
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('attendanceBtn').disabled = true;
-                        document.getElementById('certificateBtn').disabled = false;
-                        document.getElementById('attendanceStatus').style.display = 'block';
-                        showToast('✅ تم تسجيل حضورك بنجاح!', true);
-                    } else {
-                        showToast('❌ ' + (data.message || 'حدث خطأ في تسجيل الحضور'), false);
-                    }
-                })
-                .catch(error => {
-                    showToast('❌ حدث خطأ في الاتصال', false);
-                });
-        }
-
-        function downloadCertificate() {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            if (!userData) return;
-
-            if (userData.certificateLink) {
-                window.open(userData.certificateLink, '_blank');
-            } else {
-                showToast('❌ الشهادة غير متوفرة حالياً', false);
-            }
-        }
-
-        function showToast(message, success = true) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.background = success ? '#28a745' : '#dc3545';
-            toast.style.color = 'white';
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
-    </script>
+    <script src="config.js"></script>
+    <script src="profile.js"></script>
 </body>
 </html>
