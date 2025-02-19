@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             console.log('🔄 محاولة تسجيل الدخول...');
-            const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
+            const url = new URL('https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec');
             url.searchParams.append('action', 'verifyUser');
 
             if (attendanceCode) {
