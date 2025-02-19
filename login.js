@@ -22,7 +22,7 @@ window.switchLoginMethod = function(method) {
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     
-    loginForm.addEventListener('submit', async function(e) {
+    loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
         const form = this;
@@ -32,39 +32,53 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
 
-        try {
-            console.log('🔄 محاولة تسجيل الدخول...');
-            
-            let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec?action=verifyUser';
-            
-            if (attendanceCode) {
-                url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
-            } else if (email && phone) {
-                url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
-            } else {
-                throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
-            }
+        console.log('🔄 محاولة تسجيل الدخول...');
 
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            console.log('✅ استجابة الخادم:', data);
+        let url = 'https://script.google.com/macros/s/AKfycbxdZ9EgCMEN868q3ZB06dO0ZfzMordQ0KofXH5fV4n1O6qiHGC3MmuM4_wfz5QqMX-6/exec?action=verifyUser';
+        
+        if (attendanceCode) {
+            url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
+        } else if (email && phone) {
+            url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+        } else {
+            alert('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
+            form.classList.remove('loading');
+            return;
+        }
 
-            if (data.success) {
+        const callbackName = 'callback_' + Date.now();
+        window[callbackName] = function(response) {
+            console.log('✅ استجابة الخادم:', response);
+            form.classList.remove('loading');
+
+            if (response.success) {
                 console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                localStorage.setItem('userData', JSON.stringify(data.data));
-                localStorage.setItem('userEmail', data.data.email);
-                localStorage.setItem('userPhone', data.data.phone);
+                localStorage.setItem('userData', JSON.stringify(response.data));
+                localStorage.setItem('userEmail', response.data.email);
+                localStorage.setItem('userPhone', response.data.phone);
                 console.log('💾 تم حفظ البيانات، جاري التحويل...');
                 window.location.href = 'profile.html';
             } else {
-                throw new Error(data.message || 'لم يتم العثور على المستخدم');
+                alert(response.message || 'لم يتم العثور على المستخدم');
             }
-        } catch (error) {
-            console.error('⚠️ خطأ:', error);
-            alert(`❌ حدث خطأ: ${error.message}`);
-        } finally {
-            form.classList.remove('loading');
-        }
+
+            // تنظيف
+            document.head.removeChild(script);
+            delete window[callbackName];
+        };
+
+        const script = document.createElement('script');
+        script.src = `${url}&callback=${callbackName}`;
+        document.head.appendChild(script);
+
+        // معالجة timeout
+        setTimeout(function() {
+            if (window[callbackName]) {
+                form.classList.remove('loading');
+                alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
+                document.head.removeChild(script);
+                delete window[callbackName];
+            }
+        }, 10000);
     });
 });
