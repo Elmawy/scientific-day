@@ -32,83 +32,66 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
 
-        try {
-            console.log('🔄 محاولة تسجيل الدخول...');
-            
-            // إنشاء URL مع المعلمات
-            let url = 'https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec?action=verifyUser';
-            
-            if (attendanceCode) {
-                url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
-            } else if (email && phone) {
-                url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
-            } else {
-                throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
-            }
+        console.log('🔄 محاولة تسجيل الدخول...');
 
-            // إضافة معلمة callback
-            const callbackName = 'jsonpCallback_' + Date.now();
-            url += `&callback=${callbackName}`;
-
-            // إنشاء عنصر script
-            const script = document.createElement('script');
-            script.src = url;
-
-            // إنشاء promise للتعامل مع الاستجابة
-            const responsePromise = new Promise((resolve, reject) => {
-                // تعريف دالة callback
-                window[callbackName] = function(response) {
-                    resolve(response);
-                    cleanup();
-                };
-
-                // معالجة الأخطاء
-                script.onerror = () => {
-                    reject(new Error('فشل في الاتصال بالخادم'));
-                    cleanup();
-                };
-
-                // دالة التنظيف
-                function cleanup() {
-                    document.head.removeChild(script);
-                    delete window[callbackName];
-                }
-
-                // تحديد مهلة زمنية
-                setTimeout(() => {
-                    reject(new Error('انتهت مهلة الاتصال'));
-                    cleanup();
-                }, 10000);
-            });
-
-            // إضافة script إلى الصفحة
-            document.head.appendChild(script);
-
-            // انتظار الاستجابة
-            responsePromise.then(data => {
-                console.log('✅ استجابة الخادم:', data);
-
-                if (data && data.success) {
-                    console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
-                    localStorage.setItem('userData', JSON.stringify(data.data));
-                    localStorage.setItem('userEmail', data.data.email);
-                    localStorage.setItem('userPhone', data.data.phone);
-                    console.log('💾 تم حفظ البيانات، جاري التحويل...');
-                    window.location.href = 'profile.html';
-                } else {
-                    throw new Error(data.message || 'لم يتم العثور على المستخدم');
-                }
-            }).catch(error => {
-                console.error('⚠️ خطأ:', error);
-                alert(`❌ حدث خطأ: ${error.message}`);
-            }).finally(() => {
-                form.classList.remove('loading');
-            });
-
-        } catch (error) {
-            console.error('⚠️ خطأ:', error);
-            alert(`❌ حدث خطأ: ${error.message}`);
+        // إنشاء URL مع المعلمات
+        let url = 'https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec?action=verifyUser';
+        
+        if (attendanceCode) {
+            url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
+        } else if (email && phone) {
+            url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
+        } else {
+            alert('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             form.classList.remove('loading');
+            return;
         }
+
+        // تنفيذ الطلب باستخدام JSONP
+        const callbackName = 'callback_' + Math.random().toString(36).substr(2, 9);
+        let scriptElement = null;
+
+        const cleanup = () => {
+            if (scriptElement && scriptElement.parentNode) {
+                scriptElement.parentNode.removeChild(scriptElement);
+            }
+            delete window[callbackName];
+        };
+
+        const timeoutId = setTimeout(() => {
+            cleanup();
+            form.classList.remove('loading');
+            alert('انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.');
+        }, 10000);
+
+        window[callbackName] = function(response) {
+            clearTimeout(timeoutId);
+            cleanup();
+            form.classList.remove('loading');
+
+            console.log('✅ استجابة الخادم:', response);
+
+            if (response.success) {
+                console.log('🎉 تم تسجيل الدخول بنجاح، جاري حفظ البيانات...');
+                localStorage.setItem('userData', JSON.stringify(response.data));
+                localStorage.setItem('userEmail', response.data.email);
+                localStorage.setItem('userPhone', response.data.phone);
+                console.log('💾 تم حفظ البيانات، جاري التحويل...');
+                window.location.href = 'profile.html';
+            } else {
+                alert(response.message || 'حدث خطأ غير معروف');
+            }
+        };
+
+        // إنشاء وإضافة عنصر السكريبت
+        scriptElement = document.createElement('script');
+        scriptElement.src = `${url}&callback=${callbackName}`;
+        scriptElement.onerror = function() {
+            clearTimeout(timeoutId);
+            cleanup();
+            form.classList.remove('loading');
+            alert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+        };
+        document.head.appendChild(scriptElement);
     });
 });
