@@ -3,461 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البيانات الشخصية - اليوم العلمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <!-- إضافة مكتبة Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>الملف الشخصي</title>
+    <!-- إضافة Bootstrap RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <style>
-        :root {
-            --primary-color: #005C97;
-            --secondary-color: #363795;
-            --accent-color: #00BCD4;
-            --text-color: #2C3E50;
-            --background-color: #F5F7FA;
-            --success-color: #28a745;
-            --error-color: #dc3545;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--background-color);
-            font-family: 'Tajawal', sans-serif;
-            color: var(--text-color);
-            min-height: 100vh;
-        }
-
-        .header {
-            background: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            height: 60px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .profile-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-header h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .welcome-banner {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            text-align: center;
-            animation: slideDown 0.5s ease;
-        }
-
-        .info-group {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: rgba(0,92,151,0.03);
-            border-radius: 10px;
-            border: 1px solid rgba(0,92,151,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .info-group:hover {
-            box-shadow: 0 5px 15px rgba(0,92,151,0.1);
-            transform: translateY(-2px);
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .info-item i {
-            color: var(--primary-color);
-            margin-left: 10px;
-        }
-
-        .button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .button:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .button i {
-            font-size: 18px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .logout-btn {
-            background: var(--error-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .attendance-status {
-            text-align: center;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 8px;
-            background: #e8f5e9;
-            color: var(--success-color);
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from { 
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .profile-card {
-                padding: 20px;
-            }
-
-            .logo {
-                height: 40px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .button {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .logout-btn {
-                position: static;
-                margin: 10px auto;
-                width: fit-content;
-            }
-        }
-
-        .toast {
+        #toast {
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
-            padding: 15px 25px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 5px;
             display: none;
-            animation: slideUp 0.3s ease;
+            z-index: 1000;
         }
-
-        @keyframes slideUp {
-            from { 
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-            <script>
-    window.onload = async function() {
-        console.log('🔍 تحميل بيانات المستخدم...');
-    
-        const userDataString = localStorage.getItem('userData');
-        if (!userDataString) {
-            console.log('📡 محاولة جلب البيانات من Google Sheets...');
-            await fetchUserDataFromGoogleSheets();
-        } else {
-            loadUserData(JSON.parse(userDataString));
-        }
-    };
-
-    async function fetchUserDataFromGoogleSheets() {
-        const email = localStorage.getItem('userEmail');
-        const phone = localStorage.getItem('userPhone');
-
-        if (!email || !phone) {
-            console.warn('⚠️ بيانات تسجيل الدخول غير متوفرة، إعادة التوجيه...');
-            window.location.href = 'index.html';
-            return;
-        }
-
-        try {
-            const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=verifyUser&email=${email}&phone=${phone}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data.success) {
-                console.log('✅ بيانات المستخدم من Google Sheets:', data.data);
-                localStorage.setItem('userData', JSON.stringify(data.data));
-                loadUserData(data.data);
-            } else {
-                console.error('❌ خطأ في جلب البيانات:', data.message);
-            }
-        } catch (error) {
-            console.error('❌ خطأ أثناء جلب البيانات:', error);
-        }
-    }
-
-    function loadUserData(userData) {
-        console.log('✅ تحميل بيانات المستخدم إلى الصفحة...');
-        setElementText('userName', userData.name);
-        setElementText('userEmail', userData.email);
-        setElementText('userPhone', userData.phone);
-        setElementText('userGender', userData.gender);
-        setElementText('userType', userData.type);
-        setElementText('userCountry', userData.country);
-    }
-
-    function setElementText(id, text) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.textContent = text || 'غير متوفر';
-        } else {
-            console.error(`❌ العنصر #${id} غير موجود في HTML`);
-        }
-    }
-</script>
-
+        #attendanceStatus {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <button class="logout-btn" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i>
-            تسجيل الخروج 
-        </button>
-        <div class="logo-container">
-            <img src="شعار الجامع.png" alt="شعار الجامع" class="logo">
-            <img src="شعار جمعية اثر الجديد بدون خلفية.png" alt="شعار الجمعية" class="logo">
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="profile-card">
-            <div class="welcome-banner">
-                <h2><i class="fas fa-user-circle"></i> حياك الله <span id="welcomeName">-</span></h2>
-                <p>سعدنا بوجودك معنا في اليوم العلمي</p>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h3>حياك الله معنا</h3>
+                <p class="mb-0">سعدنا بوجودك معنا في اليوم العلمي</p>
             </div>
-
-            <div class="info-group">
-                <h3><i class="fas fa-info-circle"></i> معلومات المستخدم</h3>
-                <div class="info-item">
-                    <span><i class="fas fa-user"></i> الاسم:</span>
-                    <span id="userName">-</span>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">
+                            <i class="bi bi-info-circle"></i>
+                            معلومات المستخدم
+                        </h4>
+                        <div class="mb-3">
+                            <label class="fw-bold">الاسم:</label>
+                            <span id="userName">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">البريد الإلكتروني:</label>
+                            <span id="userEmail">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">رقم الجوال:</label>
+                            <span id="userPhone">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">الجنس:</label>
+                            <span id="userGender">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">نوع المشاركة:</label>
+                            <span id="userType">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">الدولة:</label>
+                            <span id="userCountry">-</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span><i class="fas fa-envelope"></i> البريد الإلكتروني:</span>
-                    <span id="userEmail">-</span>
+                <div class="text-center mt-4">
+                    <button id="attendanceBtn" class="btn btn-primary" onclick="markAttendance()">تسجيل الحضور</button>
+                    <button id="certificateBtn" class="btn btn-success" disabled>تحميل الشهادة</button>
                 </div>
-                <div class="info-item">
-                    <span><i class="fas fa-phone"></i> رقم الجوال:</span>
-                    <span id="userPhone">-</span>
+                <div id="attendanceStatus" class="alert alert-success mt-3 text-center">
+                    ✅ تم تسجيل حضورك بنجاح!
                 </div>
-                <div class="info-item">
-                    <span><i class="fas fa-venus-mars"></i> الجنس:</span>
-                    <span id="userGender">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-user-tag"></i> نوع المشاركة:</span>
-                    <span id="userType">-</span>
-                </div>
-                <div class="info-item">
-                    <span><i class="fas fa-globe"></i> الدولة:</span>
-                    <span id="userCountry">-</span>
-                </div>
-            </div>
-
-            <div id="attendanceStatus" class="attendance-status">
-                <i class="fas fa-check-circle"></i> تم تسجيل حضورك بنجاح!
-            </div>
-
-            <div class="button-group">
-                <button id="attendanceBtn" class="button" onclick="markAttendance()">
-                    <i class="fas fa-clipboard-check"></i>
-                    تسجيل الحضور
-                </button>
-                <button id="certificateBtn" class="button" onclick="downloadCertificate()" disabled>
-                    <i class="fas fa-certificate"></i>
-                    تحميل الشهادة
-                </button>
             </div>
         </div>
     </div>
 
-    <div id="toast" class="toast"></div>
+    <div id="toast"></div>
 
     <script>
-       window.onload = async function() {
-    try {
-        // محاولة قراءة البيانات من localStorage
-        const userData = localStorage.getItem('userData');
-        
-        if (userData) {
-            // إذا وجدت البيانات، قم بتحليلها وعرضها
-            const parsedData = JSON.parse(userData);
-            updateUI(parsedData);
-        } else {
-            // إذا لم توجد البيانات، حاول جلبها من السيرفر
-            const email = localStorage.getItem('userEmail');
-            const phone = localStorage.getItem('userPhone');
-            
-            if (!email || !phone) {
-                window.location.href = 'login.html';
-                return;
-            }
+        // دالة تسجيل الحضور
+        async function markAttendance() {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (!userData) {
+                    showToast('❌ لم يتم العثور على بيانات المستخدم', false);
+                    return;
+                }
 
-            const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=verifyUser&email=${email}&phone=${phone}`;
-            const response = await fetch(url);
-            const result = await response.json();
+                const url = `https://script.google.com/macros/s/AKfycbwlpjDzPXyNolYKUuRZ440ETb4oPDYPthz62ObC8FSXix7TLv6UGSGmLcBrLYy49Eiy/exec?action=markAttendance&email=${userData.email}&phone=${userData.phone}`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-            if (result.success && result.data) {
-                localStorage.setItem('userData', JSON.stringify(result.data));
-                updateUI(result.data);
-            } else {
-                throw new Error('فشل في جلب البيانات');
+                if (data.success) {
+                    document.getElementById('attendanceBtn').disabled = true;
+                    document.getElementById('certificateBtn').disabled = false;
+                    document.getElementById('attendanceStatus').style.display = 'block';
+                    showToast('✅ تم تسجيل حضورك بنجاح!', true);
+                  
+                    userData.attendance = "حاضر";
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                } else {
+                    showToast(data.message || '❌ حدث خطأ في تسجيل الحضور', false);
+                }
+            } catch (error) {
+                console.error('خطأ:', error);
+                showToast('❌ حدث خطأ في الاتصال', false);
             }
         }
-    } catch (error) {
-        console.error('خطأ:', error);
-        showToast('❌ حدث خطأ في تحميل البيانات', false);
-    }
-};
 
-function updateUI(userData) {
-    // تحديث عناصر الواجهة بالبيانات
-    document.getElementById('userName').textContent = userData.name || '-';
-    document.getElementById('userEmail').textContent = userData.email || '-';
-    document.getElementById('userPhone').textContent = userData.phone || '-';
-    document.getElementById('userGender').textContent = userData.gender || '-';
-    document.getElementById('userType').textContent = userData.type || '-';
-    document.getElementById('userCountry').textContent = userData.country || '-';
-    document.getElementById('welcomeName').textContent = userData.name?.split(' ')[0] || 'زائرنا الكريم';
+        // دالة تحميل البيانات عند فتح الصفحة
+        window.onload = function() {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (!userData) {
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-    // التحقق من حالة الحضور
-    if (userData.attendance === "حاضر") {
-        document.getElementById('attendanceBtn').disabled = true;
-        document.getElementById('certificateBtn').disabled = false;
-        document.getElementById('attendanceStatus').style.display = 'block';
-    }
-}
+                document.getElementById('userName').textContent = userData.name || '-';
+                document.getElementById('userEmail').textContent = userData.email || '-';
+                document.getElementById('userPhone').textContent = userData.phone || '-';
+                document.getElementById('userGender').textContent = userData.gender || '-';
+                document.getElementById('userType').textContent = userData.type || '-';
+                document.getElementById('userCountry').textContent = userData.country || '-';
 
-function showToast(message, success = true) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.style.background = success ? '#28a745' : '#dc3545';
-    toast.style.color = 'white';
-    toast.style.display = 'block';
-    
-    setTimeout(() => {
-        toast.style.display = 'none';
-    }, 3000);
+                if (userData.attendance === "حاضر") {
+                    document.getElementById('attendanceBtn').disabled = true;
+                    document.getElementById('certificateBtn').disabled = false;
+                    document.getElementById('attendanceStatus').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('خطأ:', error);
+                showToast('❌ حدث خطأ في تحميل البيانات', false);
+            }
+        };
 
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
+        // دالة عرض الرسائل
+        function showToast(message, success = true) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = success ? '#28a745' : '#dc3545';
+            toast.style.color = 'white';
+            toast.style.display = 'block';
+          
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
         }
     </script>
 </body>
