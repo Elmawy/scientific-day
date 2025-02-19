@@ -1,4 +1,3 @@
-// جعل الدالة متاحة عالمياً
 window.switchLoginMethod = function(method) {
     const codeLogin = document.getElementById('codeLogin');
     const credentialsLogin = document.getElementById('credentialsLogin');
@@ -20,7 +19,6 @@ window.switchLoginMethod = function(method) {
     }
 }
 
-// إضافة مستمع الحدث عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     
@@ -36,32 +34,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             console.log('🔄 محاولة تسجيل الدخول...');
-            const url = new URL('https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec');
-            url.searchParams.append('action', 'verifyUser');
-
+            const baseUrl = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec';
+            
+            // بناء URL مع المعلمات
+            let url = `${baseUrl}?action=verifyUser`;
             if (attendanceCode) {
-                url.searchParams.append('attendanceCode', attendanceCode);
+                url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
             } else if (email && phone) {
-                url.searchParams.append('email', email);
-                url.searchParams.append('phone', phone);
+                url += `&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}`;
             } else {
                 throw new Error('يرجى إدخال رمز الحضور أو البريد الإلكتروني ورقم الجوال');
             }
 
-            const response = await fetch(url, {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
+            // استخدام JSONP لتجاوز قيود CORS
+            const callbackName = 'jsonpCallback_' + Math.random().toString(36).substr(2, 9);
+            
+            const promise = new Promise((resolve, reject) => {
+                window[callbackName] = function(response) {
+                    resolve(response);
+                    document.head.removeChild(script);
+                    delete window[callbackName];
+                };
+
+                const script = document.createElement('script');
+                script.src = `${url}&callback=${callbackName}`;
+                script.onerror = () => {
+                    reject(new Error('فشل في الاتصال بالخادم'));
+                    document.head.removeChild(script);
+                    delete window[callbackName];
+                };
+                document.head.appendChild(script);
             });
 
-            if (!response.ok) {
-                throw new Error(`خطأ في الاتصال! الحالة: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await promise;
             console.log('✅ استجابة الخادم:', data);
 
             if (data && data.success) {
