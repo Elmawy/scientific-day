@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('🔄 محاولة تسجيل الدخول...');
             
             // إنشاء URL مع المعلمات
-            let url = 'https://script.google.com/macros/s/AKfycbwUW_7YEmUAOUt8RUy8o3lSvYNv5WgWyyFYLVlsTFKpSe_GDk8Peh9C5j5P1N_zFhZA/exec?action=verifyUser';
+            let url = 'https://script.google.com/macros/s/AKfycbyb1yluA0phmvMqLrmV-W_N8m4VtIxHuoNyVqEw1QZ_Ol6w-l1wgwggoSLcOlF6R2zE/exec?action=verifyUser';
             
             if (attendanceCode) {
                 url += `&attendanceCode=${encodeURIComponent(attendanceCode)}`;
